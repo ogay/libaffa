@@ -1,0 +1,6 @@
+AC_INIT(example1.cpp)
+AM_INIT_AUTOMAKE(examples, $AAF_VERSION)
+
+AC_PROG_CXX
+AC_PROG_INSTALL
+AC_OUTPUT(Makefile)

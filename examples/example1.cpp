@@ -1,0 +1,77 @@
+/*
+ * example1.cpp -- A simple example of using the lib
+ * Copyright (c) 2003 EPFL (Ecole Polytechnique Federale de Lausanne)
+ *
+ * This file is part of libaa.
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with libaa; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+
+#include <aa.h>
+#include <cstdio>
+#include <iostream>
+
+
+int main()
+{
+
+  //
+
+  Interval u(-2,2);
+  Interval v(-1,1);
+  AAF x = u;
+  AAF r = v;
+  AAF s = v;
+
+  AAF temp1 = (10+x+r);
+  AAF temp2 = (10-x+s);
+
+  AAF z = (10+x+r)*(10-x+s);
+
+  cout << " x" << endl;
+  cout << x;
+  cout << " r" << endl;
+  cout << r;
+  cout << " s" << endl;
+  cout << s;;
+
+  cout << " (10+x+r)" << endl;
+  cout << temp1;
+  cout << " (10-x+s)" << endl;
+  cout << temp2;
+
+  cout << " (10+x+r)*(10-x+s)" << endl;
+  cout << z;
+  cout << z.convert();
+
+  //
+
+  exit(0);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
