@@ -1,6 +1,7 @@
 /*
  * aa_aafcommon.cpp -- Common functions used to manipulate AAF
  * Copyright (c) 2003 EPFL (Ecole Polytechnique Federale de Lausanne)
+ * Copyright (c) 2004 LIRIS (University Claude Bernard Lyon 1)
  *
  * This file is part of libaa.
  *
@@ -139,7 +140,7 @@ AAF & AAF::operator = (const AAF & P)
 
 // Ostream output of an AAF
 
-ostream & operator << (ostream & s, const AAF &P)
+std::ostream & operator << (std::ostream & s, const AAF &P)
 {
 
   // s.setf(0, ios_base::floatfield);
@@ -159,7 +160,7 @@ ostream & operator << (ostream & s, const AAF &P)
 
 void AAF::aafprint() const
 {
-  cout << "-------------\n";
+  std::cout << "-------------\n";
 
   printf("Size = %d\n", length);
   printf("v0 = %f\n", cvalue);

@@ -1,6 +1,7 @@
 /*
  * aa_interval.h -- A simple interval class
  * Copyright (c) 2003 EPFL (Ecole Polytechnique Federale de Lausanne)
+ * Copyright (c) 2004 LIRIS (University Claude Bernard Lyon 1)
  *
  * This file is part of libaa.
  *
@@ -43,7 +44,7 @@ class Interval
   Interval(double l, double h);
   Interval & operator = (const Interval & I);
 
-  friend istream & operator >> (istream & s, Interval &I);
+  friend std::istream & operator >> (std::istream & s, Interval &I);
 
   double getlo() const;
   double gethi() const;
@@ -57,7 +58,7 @@ class Interval
 
 };
 
-ostream & operator << (ostream & s, const Interval &I);
+std::ostream & operator << (std::ostream & s, const Interval &I);
 Interval mintrigo( const Interval &I);
 
 

@@ -1,7 +1,8 @@
 /*
  * aa_aaf.h -- Affine Arithmetic class
  * Copyright (C) 2003 EPFL (Ecole Polytechnique Federale de Lausanne)
- *
+ * Copyright (c) 2004 LIRIS (University Claude Bernard Lyon 1)
+*
  * This file is part of libaa.
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -25,6 +26,9 @@
 
 #include "aa_interval.h"
 #include <iostream>
+
+
+
 
 // Affine Arithmetic Form
 
@@ -64,7 +68,7 @@ class AAF
   AAF operator - ();
   AAF operator * (double);
 
-  friend ostream & operator << (ostream & s, const AAF &P);
+  friend std::ostream & operator << (std::ostream & s, const AAF &P);
 
   void aafprint() const;
   static void set_default(const unsigned val=0);

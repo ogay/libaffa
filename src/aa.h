@@ -1,6 +1,7 @@
 /*
  * aa.h -- Affine Arithmetic Library
  * Copyright (C) 2003 EPFL (Ecole Polytechnique Federale de Lausanne)
+ * Copyright (c) 2004 LIRIS (University Claude Bernard Lyon 1)
  *
  * This file is part of libaa.
  *

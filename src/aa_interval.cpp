@@ -1,6 +1,7 @@
 /*
  * aa_interval.cpp -- Implementation of the interval class
  * Copyright (c) 2003 EPFL (Ecole Polytechnique Federale de Lausanne)
+ * Copyright (c) 2004 LIRIS (University Claude Bernard Lyon 1)
  *
  * This file is part of libaa.
  *
@@ -129,7 +130,7 @@ double Interval::radius() const
 
 // Istream input of an Interval
 
-istream & operator >> (istream & s, Interval &I)
+std::istream & operator >> (std::istream & s, Interval &I)
 {
 
   // Accepts the forms
@@ -170,7 +171,7 @@ void Interval::intvprint() const
 
 // Ostream output of an Interval
 
-ostream & operator << (ostream & s, const Interval &I)
+std::ostream & operator << (std::ostream & s, const Interval &I)
 {
 
   // s.setf(0, ios_base::floatfield);

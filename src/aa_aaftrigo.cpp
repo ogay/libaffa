@@ -1,6 +1,7 @@
 /*
  * aa_aaftrigo.cpp -- Trigonometric operations (all non-affine)
  * Copyright (c) 2003 EPFL (Ecole Polytechnique Federale de Lausanne)
+ * Copyright (c) 2004 LIRIS (University Claude Bernard Lyon 1)
  *
  * This file is part of libaa.
  *
@@ -132,7 +133,7 @@ AAF sin(const AAF & P)
 
       double *ptr;
 
-      ptr = max_element(r, r+NPTS);
+      ptr = std::max_element(r, r+NPTS);
 
       delta = *ptr;
 

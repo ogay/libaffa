@@ -1,6 +1,7 @@
 /*
  * aa_aafarithm.cpp -- Affine arithmetical operations
  * Copyright (c) 2003 EPFL (Ecole Polytechnique Federale de Lausanne)
+ * Copyright (c) 2004 LIRIS (University Claude Bernard Lyon 1)
  *
  * This file is part of libaa.
  *
@@ -51,7 +52,7 @@ AAF AAF::operator + (const AAF & P)
   // Fill the resulting indexes array
   // by merging the 2 input indexes array
 
-  unsigned * fin = set_union(id1,id1+l1,id2,id2+l2,idtemp);
+  unsigned * fin = std::set_union(id1,id1+l1,id2,id2+l2,idtemp);
   unsigned ltemp=fin-idtemp;
 
   Temp.coefficients = new double [ltemp];
@@ -117,7 +118,7 @@ AAF AAF::operator - (const AAF & P)
   // Fill the resulting indexes array
   // by merging the 2 input indexes array
 
-  unsigned * fin = set_union(id1,id1+l1,id2,id2+l2,idtemp);
+  unsigned * fin = std::set_union(id1,id1+l1,id2,id2+l2,idtemp);
   unsigned ltemp=fin-idtemp;
 
   Temp.coefficients = new double [ltemp];
