@@ -57,6 +57,9 @@
 #include <cstdlib>
 #include <aa.h>
 
+using namespace std;
+
+
 #define PI 4*(atan(1.0))
 #define PTS 50       // number of points for the interpolated function
                      // 50 is normally enough

@@ -53,6 +53,9 @@
 #include <aa.h>
 #include <Easyval.hh>
 
+using namespace std;
+
+
 #define PI 4*(atan(1.0))
 
 
