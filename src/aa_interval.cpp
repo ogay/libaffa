@@ -30,14 +30,14 @@
 #define PI (4*atan(1.0))
 
 
-// Interval(), modlo(), modhi(), modlohi() are not
+// interval(), modlo(), modhi(), modlohi() are not
 // inline functions as they arent used by the lib
 // but they are useful for applications
 
 // Create a null interval
 // Useful if we only declare a variable
 
-Interval:: Interval():
+interval:: interval():
   lo(0), hi(0)
 {
 }
@@ -45,7 +45,7 @@ Interval:: Interval():
 
 //  Affectation operator
 
-Interval & Interval::operator = (const Interval & I)
+interval & interval::operator = (const interval & I)
 {
   if (&I!=this)
     {
@@ -57,35 +57,35 @@ Interval & Interval::operator = (const Interval & I)
 }
 
 
-// Modify the lower bound of an Interval
+// Modify the lower bound of an interval
 
-void Interval::modlo(const double low)
+void interval::modlo(const double low)
 {
   lo=low;
 }
 
 
-// Modify the higher bound of an Interval
+// Modify the higher bound of an interval
 
-void Interval::modhi(const double high)
+void interval::modhi(const double high)
 {
   hi=high;
 }
 
 
-// Modify the two bounds of an Interval
+// Modify the two bounds of an interval
 
-void Interval::modlohi(const double low, const double high)
+void interval::modlohi(const double low, const double high)
 {
   lo=low;
   hi=high;
 }
 
 
-// Calculate the midpoint of an Interval
+// Calculate the midpoint of an interval
 // i.e (lo+hi)/2
 
-double Interval::mid() const
+double interval::mid() const
 {
 
   double t0,t1;
@@ -104,10 +104,10 @@ double Interval::mid() const
 }
 
 
-// Calculate the radius of an Interval
+// Calculate the radius of an interval
 // i.e (m-lo >=hi-m ? m-lo : hi-m)
 
-double Interval::radius() const
+double interval::radius() const
 {
   double m = mid();
 
@@ -128,9 +128,9 @@ double Interval::radius() const
 }
 
 
-// Istream input of an Interval
+// Istream input of an interval
 
-std::istream & operator >> (std::istream & s, Interval &I)
+std::istream & operator >> (std::istream & s, interval &I)
 {
 
   // Accepts the forms
@@ -152,16 +152,16 @@ std::istream & operator >> (std::istream & s, Interval &I)
     s >> lo;
   }
 
-  if (s) I = Interval(lo, hi);
+  if (s) I = interval(lo, hi);
 
   return s;
 
 }
 
 
-// Print an Interval to stdout
+// Print an interval to stdout
 
-void Interval::intvprint() const
+void interval::intvprint() const
 {
 
   printf("[%f,%f]\n", lo, hi);
@@ -169,15 +169,15 @@ void Interval::intvprint() const
 }
 
 
-// Ostream output of an Interval
+// Ostream output of an interval
 
-std::ostream & operator << (std::ostream & s, const Interval &I)
+std::ostream & operator << (std::ostream & s, const interval &I)
 {
 
   // s.setf(0, ios_base::floatfield);
   // cause we don't want to display in scientific format
 
-  s << "[" << I.getlo() << "," << I.gethi() << "]\n";
+  s << "[" << I.left() << "," << I.right() << "]\n";
   return s;
 
 }
@@ -187,14 +187,14 @@ std::ostream & operator << (std::ostream & s, const Interval &I)
 // of an interval, e.g. : [5*PI, 6*PI] -> [PI, 2PI]
 // In fact it is the closer interval to 0
 
-Interval mintrigo( const Interval &I)
+interval mintrigo( const interval &I)
 {
 
   // This function is no more needed
   // for our new algorithm of the sine of an AAF
 
-  double a = I.getlo();
-  double b = I.gethi();
+  double a = I.left();
+  double b = I.right();
   double t1, t2 ;
 
   t1 = floor(a/(2*PI));
@@ -203,5 +203,17 @@ Interval mintrigo( const Interval &I)
   a=a-(t1*2*PI);
   b=a+t2;
 
-  return Interval(a,b);
+  return interval(a,b);
 }
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+
+
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

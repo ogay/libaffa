@@ -2,6 +2,7 @@
  * aa_aafapprox.cpp -- Standart non-affine operations
  * Copyright (c) 2003 EPFL (Ecole Polytechnique Federale de Lausanne)
  * Copyright (c) 2004 LIRIS (University Claude Bernard Lyon 1)
+ * Copyright (c) 2005 Nathan Hurst
  *
  * This file is part of libaa.
  *
@@ -25,76 +26,77 @@
 #include <algorithm>
 #include <cmath>
 
+#include "aa_util.h"
+
 
 // Operator  *
 
-AAF AAF::operator * (const AAF & P)
-{
+AAF AAF::operator * (const AAF & P) const {
+    unsigned l1 = length;
+    unsigned l2 = P.length;
+
+    unsigned * id1 = indexes;
+    unsigned * id2 = P.indexes;
+
+    double * va1 = coefficients;
+    double * va2 = P.coefficients;
+
+    unsigned * pu1 = id1;
+    unsigned * pu2 = id2;
+
+    AAF Temp(cvalue*P.cvalue);  // Create our resulting AAF
+    
+    Temp.indexes = new unsigned [l1+l2+1];
+    unsigned * idtemp=Temp.indexes;
 
 
-  unsigned l1 = length;
-  unsigned l2 = P.length;
+    // Fill the indexes array
 
-  unsigned * id1=indexes;
-  unsigned * id2=P.indexes;
+    unsigned * fin = std::set_union(id1,id1+l1,id2,id2+l2,idtemp);
+    unsigned ltemp=fin-idtemp;
 
-  double * va1=coefficients;
-  double * va2=P.coefficients;
+    Temp.coefficients = new double [ltemp+1];
+    double * vatempg=Temp.coefficients;
 
-  unsigned * pu1=id1;
-  unsigned * pu2=id2;
-
-  AAF Temp(cvalue*P.cvalue);  // Create our resulting AAF
-
-  Temp.indexes = new unsigned [l1+l2+1];
-  unsigned * idtemp=Temp.indexes;
+    Temp.length = ltemp+1;
 
 
-  // Fill the indexes array
+    // Fill the coefficients array
 
-  unsigned * fin = std::set_union(id1,id1+l1,id2,id2+l2,idtemp);
-  unsigned ltemp=fin-idtemp;
-
-  Temp.coefficients = new double [ltemp+1];
-  double * vatempg=Temp.coefficients;
-
-  Temp.length = ltemp+1;
-
-
-  // Fill the coefficients array
-
- for (unsigned i=0;i<ltemp;i++)
+    for (unsigned i = 0; i < ltemp; i++)
     {
-      unsigned a=pu1-id1;
-      unsigned b=pu2-id2;
+        unsigned a = pu1-id1;
+        unsigned b = pu2-id2;
 
-      if (a==l1|| id1[a]!=idtemp[i])
+        if (a==l1 || id1[a]!=idtemp[i])
 	{
-	  vatempg[i]=cvalue*va2[b];  // cvalue*va2[b]+(P.cvalue)*0
-	  pu2++;
-	  continue;
+            vatempg[i] = cvalue*va2[b];  // cvalue*va2[b]+(P.cvalue)*0
+            pu2++;
+            continue;
 	}
 
-      if (b==l2 || id2[b]!=idtemp[i])
+        if (b==l2 || id2[b]!=idtemp[i])
 	{
-	  vatempg[i]=(P.cvalue)*va1[a];  // cvalue*0+(P.cvalue)*va1[a]
-	  pu1++;
-	  continue;
+            vatempg[i] = (P.cvalue)*va1[a];  // cvalue*0+(P.cvalue)*va1[a]
+            pu1++;
+            continue;
 	}
 
-      vatempg[i]=cvalue*va2[b]+(P.cvalue)*va1[a];
-      pu1++;
-      pu2++;
+        vatempg[i] = cvalue*va2[b] + (P.cvalue)*va1[a];
+        pu1++;
+        pu2++;
     }
 
 
- // Compute the error
- // in a new noise symbol
+    // Compute the error
+    // in a new noise symbol
 
- Temp.indexes[ltemp]=inclast();
- Temp.coefficients[ltemp]=rad()*(P.rad());
+    Temp.indexes[ltemp]=inclast();
+    Temp.coefficients[ltemp]=rad()*(P.rad());
 
- return Temp;
+    Temp.special = binary_special(special, P.special);
+    
+    return Temp;
 
 }
 
@@ -103,9 +105,8 @@ AAF AAF::operator * (const AAF & P)
 // It's a non affine-operation
 // We use the identity x/y = x * (1/y
 
-AAF AAF::operator / (const AAF & P)
-{
-  return (*this)*inv(P);
+AAF AAF::operator / (const AAF & P) const {
+    return (*this)*inv(P);
 }
 
 
@@ -113,61 +114,36 @@ AAF AAF::operator / (const AAF & P)
 // It's a non affine-operation
 // We use the Chebyshev approximation
 
-AAF sqrt(const AAF & P)
-{
+AAF sqrt(const AAF & P) {
+    handle_infinity(P);
+    // sqrt(x) is approximated by f(x)=alpha*x+dzeta
+    // delta is the maximum absolute error
 
-  double a, b;
-
-  // sqrt(x) is approximated by f(x)=alpha*x+dzeta
-  // delta is the maximum absolute error
-  double alpha, dzeta, delta;
-
-  double t;  // temporary var
-
-  a=P.convert().getlo(); // [a,b] is our interval
-  b=P.convert().gethi();
-
-  t= (sqrt(a)+sqrt(b));
-
-
-  alpha=1/t; // alpha is the slope of the line r(x) that
-             // interpolate (a, sqrt(a)) and (b, f(b))
-
-  // dzeta calculation:
-  dzeta= (t/8)+0.5*(sqrt(a*b))/t;
-
-  // Calculation of the error
-  delta=(sqrt(b)-sqrt(a))*(sqrt(b)-sqrt(a))/(8*t);
+    const double a = P.convert().left(); // [a,b] is our interval
+    const double b = P.convert().right();
+    AAF_TYPE type;
+    if(a >= 0)
+        type = AAF_TYPE_AFFINE;
+    else if(b < 0) 
+        type = AAF_TYPE_NAN;
+    else if(a < 0) // undefined, can we do better?
+        type = (AAF_TYPE)(AAF_TYPE_AFFINE | AAF_TYPE_NAN);
+    //type = (AAF_TYPE)(type | P.special);
+    
+    const double t = (sqrt(a)+sqrt(b));
 
 
-  // z0 = alpha*x0 + dzeta
+    const double alpha = 1/t; // alpha is the slope of the line r(x) that
+    // interpolate (a, sqrt(a)) and (b, f(b))
 
-  AAF Temp(alpha*(P.cvalue)+dzeta);
+    // dzeta calculation:
+    const double dzeta = (t/8)+0.5*(sqrt(a*b))/t;
 
-  Temp.length=(P.length)+1;
-  Temp.coefficients = new double [Temp.length];
-  Temp.indexes = new unsigned [Temp.length];
+    // Calculation of the error
+    const double rdelta = (sqrt(b)-sqrt(a));
+    const double delta = rdelta*rdelta/(8*t);
 
-  // zi = alpha*xi
-
-  for (unsigned i=0; i < P.length;i++)
-    {
-      Temp.indexes[i]=P.indexes[i];
-      Temp.coefficients[i]=alpha*(P.coefficients[i]);
-    }
-
-
- // Compute the error
- // in a new noise symbol
-
-  // zk = delta
-
-  Temp.indexes[P.length]=Temp.inclast();   // the error indx
-  Temp.coefficients[P.length]=delta;
-
-
-  return Temp;
-
+    return AAF(P, alpha, dzeta, delta, type);
 }
 
 
@@ -176,98 +152,164 @@ AAF sqrt(const AAF & P)
 // We use mini-range approximation
 // cause undershoot can be high with Chebyshev here
 
-AAF inv(const AAF & P)
-{
-
-
-  double a, b;
-  double alpha, dzeta, delta;
-
-  double t1, t2;  // temporary var
-
-
-  a=P.convert().getlo();
-  b=P.convert().gethi();
-
-
-  // a := min(abs(a), abs(b))
-  // b := max(abs(a), abs(b))
-
-  t1=fabs(a);
-  t2=fabs(b);
-
-  a= t1 <? t2;  // min(t1,t2)
-  b= t1 >? t2;  // max(t1,t2)
-
-  // Derivative of 1/x is -1/x*x
-
-  alpha=-1/(b*b);
-
-  Interval i((1/a)-alpha*a,1/b-alpha*b);
-  dzeta = i.mid();
-
-  if ((P.convert().getlo()) < 0) dzeta = -dzeta;
-
-  delta=i.radius();
-
-
-
-  // z0 = alpha*x0 + dzeta
-
-  AAF Temp(alpha*(P.cvalue)+dzeta);
-
-  Temp.length=(P.length)+1;
-  Temp.coefficients = new double [Temp.length];
-  Temp.indexes = new unsigned [Temp.length];
-
-  // zi = alpha*xi
-
-  for (unsigned i=0; i < P.length;i++)
-    {
-      Temp.indexes[i]=P.indexes[i];
-      Temp.coefficients[i]=alpha*(P.coefficients[i]);
+AAF inv(const AAF & P) {
+    handle_infinity(P);
+    double a = P.convert().left();
+    double b = P.convert().right();
+    if(P.is_infinite() || (a <= 0) && (b >= 0)) {
+        return AAF(interval(-INFINITY, INFINITY));
     }
 
+    // a := min(abs(a), abs(b))
+    // b := max(abs(a), abs(b))
 
- // Compute the error
- // in a new noise symbol
+    const double t1 = fabs(a);
+    const double t2 = fabs(b);
 
-  // zk = delta
+    a= t1 <? t2;  // min(t1,t2)
+    b= t1 >? t2;  // max(t1,t2)
 
-  Temp.indexes[P.length]=Temp.inclast();   // the error indx
-  Temp.coefficients[P.length]=delta;
+    // Derivative of 1/x is -1/x*x
 
+    const double alpha=-1/(b*b);
 
-  return Temp;
+    interval i((1/a)-alpha*a, 2/b);//-alpha*b);
+    double dzeta = i.mid();
 
+    if ((P.convert().left()) < 0) dzeta = -dzeta;
+
+    return AAF(P, alpha, dzeta, i.radius(), P.special);
 }
 
+AAF abs(const AAF & P) {
+    if(P.strictly_neg())
+        return -P;
+    if(P.straddles_zero()) {
+        AAF Temp(P);
+        Temp.cvalue = fabs(Temp.cvalue)/2;
+        Temp.special = P.special;
+        
+        for (unsigned i=0; i<P.length; i++)
+            Temp.coefficients[i]=(Temp.coefficients[i])/2;
+        return Temp;
+    }
+    return P;
+}
+
+AAF sqr(const AAF & P) {
+    return P*P;
+}
 
 // Power function
-// only for integer exposents
+// only for integer exponents
 
-AAF pow(const AAF & P, int exp)
-{
-
-  AAF Temp = P;
-
-  if (!exp)
-    {
-      Temp = 1;
+AAF pow(const AAF & P, int exp) {
+    handle_infinity(P);
+    if (exp == 0) {
+        return 1;
+    } else if (exp > 0) {
+        if(exp & 1)
+            return sqr(pow(P, exp>>1))*P;
+        else
+            return sqr(pow(P, exp>>1));
+    } else {
+        return inv(pow(P, -exp));
     }
-
-  else if (exp > 0)
-  {
-      for (unsigned i=1; i<exp; i++)
-	Temp = Temp*P;
-  }
-  else
-  {
-      for (unsigned i=1; i<fabs(exp); i++)
-	Temp = Temp*P;
-      Temp = inv(Temp);
-  }
-
- return Temp;
-
 }
+
+AAF pow(const AAF & P, double xp) {
+    return exp(xp*log(P));
+}
+
+// Exponential operator
+// It's a non affine-operation
+
+AAF exp(const AAF & P) {
+    handle_infinity(P); // infinity maps to [0, infty) here
+    // exp(x) is approximated by f(x)=alpha*x+dzeta
+    // delta is the maximum absolute error
+
+    const double a = P.convert().left(); // [a,b] is our interval
+    const double b = P.convert().right();
+    
+    const double ea = exp(a);
+    const double eb = exp(b);
+    if(ea == INFINITY) {
+        printf("infinity at %g, %g -> (%g, %g)\n", a, b, ea, eb);
+    }
+    
+    const double alpha = (eb-ea)/(b-a);
+// alpha is the slope of the line r(x) that
+    // interpolate (a, exp(a)) and (b, exp(b))
+    const double xs = log(alpha);// the x of the maximum error
+    const double maxdelta = alpha*(xs - 1 - a)+ea;
+
+    // dzeta calculation:
+    const double dzeta = alpha*(1 - xs);
+
+    // Calculation of the error
+    const double delta = maxdelta/2;
+    //printf("(%g, %g, %g) -> (%g, %g) @ (%g*x + %g) e = %g\n", a, xs, b, ea, eb, alpha, dzeta, delta);
+
+    return AAF(P, alpha, dzeta, delta, P.special);
+}
+
+// Exponential operator
+// It's a non affine-operation
+
+AAF log(const AAF & P) {
+    handle_infinity(P); // infinity maps to [0, infty) here
+    // exp(x) is approximated by f(x)=alpha*x+dzeta
+    // delta is the maximum absolute error
+
+    const double a = P.convert().left(); // [a,b] is our interval
+    const double b = P.convert().right();
+    
+    AAF_TYPE type;
+    if(a > 0)
+        type = AAF_TYPE_AFFINE;
+    else if(b < 0) { // no point in continuing
+        type = AAF_TYPE_NAN;
+        return AAF(type);
+    }
+    else if(a <= 0) {// undefined, can we do better?
+        type = (AAF_TYPE)(AAF_TYPE_AFFINE | AAF_TYPE_NAN);
+        return AAF(type);
+// perhaps we should make a = 0+eps and try to continue?
+    }
+    
+    const double la = log(a);
+    const double lb = log(b);
+    
+    const double alpha = (lb-la)/(b-a);
+// alpha is the slope of the line r(x) that
+    // interpolate (a, exp(a)) and (b, exp(b))
+    const double xs = 1/(alpha);// the x of the maximum error
+    const double ys = (alpha*(xs - a)+la);
+    const double maxdelta = log(xs) - ys;
+
+    // dzeta calculation:
+    const double dzeta = alpha*(-xs)+(log(xs)+ys)/2;
+
+    // Calculation of the error
+    const double delta = maxdelta/2;
+    //printf("(%g, %g, %g) -> (%g, %g, %g) @ (%g*x + %g) e = %g\n", a, xs, b, la, log(xs), lb, alpha, dzeta, delta);
+    //printf("plot [%g:%g] log(x), (%g*x + %g)\n", a, b, alpha, dzeta);
+
+    return AAF(P, alpha, dzeta, delta, type);
+}
+
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+
+
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

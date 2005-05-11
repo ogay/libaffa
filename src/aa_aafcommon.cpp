@@ -2,6 +2,7 @@
  * aa_aafcommon.cpp -- Common functions used to manipulate AAF
  * Copyright (c) 2003 EPFL (Ecole Polytechnique Federale de Lausanne)
  * Copyright (c) 2004 LIRIS (University Claude Bernard Lyon 1)
+ * Copyright (c) 2005 Nathan Hurst
  *
  * This file is part of libaa.
  *
@@ -32,62 +33,68 @@ unsigned AAF::last = 0; // at beginnnig
 // Create an AAF from an array of doubles
 // ! For debug purposes
 
-AAF:: AAF(double v0, const double * t1, const unsigned * t2, unsigned T)
+AAF:: AAF(double v0, const double * t1, const unsigned * t2, unsigned T) 
+    : special(AAF_TYPE_AFFINE)
 {
 
-  length=T;
-  cvalue=v0;
-  coefficients = new double [length];
-  indexes = new unsigned [length];
+    length=T;
+    cvalue=v0;
+    coefficients = new double [length];
+    indexes = new unsigned [length];
 
-  for (unsigned i = 0; i < length; i++)
+    for (unsigned i = 0; i < length; i++)
     {
-    coefficients[i]=t1[i];
-    indexes[i]=t2[i];
+        coefficients[i]=t1[i];
+        indexes[i]=t2[i];
     }
 
-  if (indexes[length-1] > last) set_default(indexes[length-1]);
+    if (indexes[length-1] > last) set_default(indexes[length-1]);
 
 }
 
 
 // Copy constructor
 
-AAF:: AAF(const AAF &P)
+AAF:: AAF(const AAF &P) 
+    : special(P.special)
 {
+    unsigned plength = P.getlength();
+    coefficients = new double [plength];
+    indexes = new unsigned [plength];
 
-  unsigned plength = P.getlength();
-  coefficients = new double [plength];
-  indexes = new unsigned [plength];
+    cvalue = P.cvalue;
+    length = plength;
 
-  cvalue = P.cvalue;
-  length = plength;
-
-  for (unsigned i = 0; i<plength; i++)
+    for (unsigned i = 0; i<plength; i++)
     {
-      coefficients[i] = P.coefficients[i];
-      indexes[i] = P.indexes[i];
+        coefficients[i] = P.coefficients[i];
+        indexes[i] = P.indexes[i];
     }
 
 }
 
 
-// Create an AAF from an Interval
+// Create an AAF from an interval
 
-AAF:: AAF(Interval iv)
-{
-
-  unsigned en = inclast();
-  coefficients = new double [1];
-  indexes = new unsigned [1];
-
-
-  cvalue=(iv.gethi()+iv.getlo())/2;
-  length = 1;
-
-  coefficients[0]=(iv.gethi()-iv.getlo())/2;
-  indexes[0]=en;
-
+AAF:: AAF(interval iv) {
+    unsigned en = inclast();
+    coefficients = new double [1];
+    indexes = new unsigned [1];
+  
+    if(iv.width() == INFINITY) {
+        cvalue = 0;
+        length = 1;
+        coefficients[0] = INFINITY;
+        indexes[0] = en;
+        special = AAF_TYPE_INFINITE;
+    } else {
+        cvalue=(iv.right()+iv.left())/2;
+        length = 1;
+    
+        coefficients[0]=(iv.right()-iv.left())/2;
+        indexes[0]=en;
+        special = AAF_TYPE_AFFINE;
+    }
 }
 
 
@@ -95,10 +102,10 @@ AAF:: AAF(Interval iv)
 
 AAF::~AAF()
 {
-  if (length)
+    if (length)
     {
-      delete [] coefficients;
-      delete [] indexes;
+        delete [] coefficients;
+        delete [] indexes;
     }
 }
 
@@ -107,34 +114,34 @@ AAF::~AAF()
 
 AAF & AAF::operator = (const AAF & P)
 {
-
-  unsigned plength = P.getlength();
-
-  if (&P!=this)
+    special = P.special;
+    unsigned plength = P.getlength();
+    
+    if (&P!=this)
     {
-      if (length != plength)
-      {
+        if (length != plength)
+        {
 
-	if (length)
-	  {
-	    delete [] coefficients;
-	    delete [] indexes;
-	  }
+            if (length)
+            {
+                delete [] coefficients;
+                delete [] indexes;
+            }
 
-	coefficients = new double [plength];
-	indexes = new unsigned [plength];
-      }
+            coefficients = new double [plength];
+            indexes = new unsigned [plength];
+        }
 
-      cvalue = P.cvalue;
-      length=plength;
-    for (unsigned i = 0; i<plength; i++)
-      {
-	coefficients[i]=P.coefficients[i];
-	indexes[i]=P.indexes[i];
-      }
+        cvalue = P.cvalue;
+        length=plength;
+        for (unsigned i = 0; i<plength; i++)
+        {
+            coefficients[i]=P.coefficients[i];
+            indexes[i]=P.indexes[i];
+        }
     }
 
-  return *this;
+    return *this;
 }
 
 
@@ -143,15 +150,15 @@ AAF & AAF::operator = (const AAF & P)
 std::ostream & operator << (std::ostream & s, const AAF &P)
 {
 
-  // s.setf(0, ios_base::floatfield);
-  s << "-------------\n";
-  s << "Length = " << P.length << "\n";
-  s << "v0 = " << P.cvalue << "\n";
+    // s.setf(0, ios_base::floatfield);
+    s << "-------------\n";
+    s << "Length = " << P.length << "\n";
+    s << "v0 = " << P.cvalue << "\n";
 
-  for (unsigned i=0; i < P.length ; i++)
-    s << "e" << P.indexes[i] << " = " << P.coefficients[i] << "\n";
+    for (unsigned i=0; i < P.length ; i++)
+        s << "e" << P.indexes[i] << " = " << P.coefficients[i] << "\n";
 
-  return s;
+    return s;
 
 }
 
@@ -160,13 +167,13 @@ std::ostream & operator << (std::ostream & s, const AAF &P)
 
 void AAF::aafprint() const
 {
-  std::cout << "-------------\n";
+    std::cout << "-------------\n";
 
-  printf("Size = %d\n", length);
-  printf("v0 = %f\n", cvalue);
+    printf("Size = %d\n", length);
+    printf("v0 = %f\n", cvalue);
 
-  for (unsigned i=0; i < length ; i++)
-    printf("e%d = %f\n", indexes[i], coefficients[i]);
+    for (unsigned i=0; i < length ; i++)
+        printf("e%d = %f\n", indexes[i], coefficients[i]);
 }
 
 
@@ -177,21 +184,20 @@ void AAF::aafprint() const
 
 double AAF::getcenter() const
 {
-  return cvalue;
+    return cvalue;
 }
 
 
-// Convert an AAF to an Interval representation
+// Convert an AAF to an interval representation
 
-Interval AAF::convert() const
+interval AAF::convert() const
 {
 
-  // lower bound == central value of the AAF - the total deviation
-  // upper bound == central value of the AAF + the total deviation
-
-  Interval Temp(cvalue-rad(), cvalue+rad());
-  return Temp;
-
+    // lower bound == central value of the AAF - the total deviation
+    // upper bound == central value of the AAF + the total deviation
+    if(is_indeterminate())
+        return interval(-INFINITY, INFINITY);
+    return interval(cvalue-rad(), cvalue+rad());
 }
 
 
@@ -200,18 +206,28 @@ Interval AAF::convert() const
 
 double AAF::rad() const
 {
+    double sum=0;
 
-  double sum=0;
-
-  for (unsigned i=0; i< length; i++)
-    {
-      if (coefficients[i] >= 0.0)
-	sum+=coefficients[i];
-      else
-	sum+=-coefficients[i];
+    for (unsigned i=0; i< length; i++) {
+        if (coefficients[i] >= 0.0)
+            sum+=coefficients[i];
+        else
+            sum+=-coefficients[i];
     }
 
 
-  return sum;
+    return sum;
 
 }
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+
+
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
