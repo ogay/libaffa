@@ -1,0 +1,7 @@
+* 20050511 njh
+- Changed Interval class to match gaol interface.
+- inv now handles zero crossings.
+- added log, exp, pow(AAF, double)
+- pow(AAF, int) now uses russian peasant algorithm
+- AAFs can now be Affine, Infinite and/or NAN.  Some work remains to making sure that these are propagated correctly.
+- sqrt and log return NAN (domain errors) for negative numbers
