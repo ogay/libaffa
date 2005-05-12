@@ -96,7 +96,7 @@ int main(int argc, char **argv)
   double y; 
  
 
-  Interval itv1, itv2;
+  interval itv1, itv2;
   AAF u1, u2, v;  // v = v(u1,u2)
 
   Easyval m1,m2, n;  // n = n(m1,m2)

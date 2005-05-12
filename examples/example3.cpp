@@ -106,7 +106,7 @@ int main(int argc, char **argv)
   double min2, max2;
   double min, max;
 
-  Interval itv;
+  interval itv;
   AAF u, v;  // v = v(u)
 
   Easyval m,n;  // n = n(m)
@@ -226,14 +226,14 @@ int main(int argc, char **argv)
 
   data2.close();
 
-  // We write the error boxes for the Interval Arithmetic
+  // We write the error boxes for the interval Arithmetic
 
   fin2 = 1;
 
   ydelta_tot2 = 0;
 
   data3 << "# Datas of the error boxes" << endl;
-  data3 << "# for Interval Arithmetic" << endl;
+  data3 << "# for interval Arithmetic" << endl;
   data3 << "#\tx\ty\tydelta" << endl;
 
 
@@ -322,7 +322,7 @@ int main(int argc, char **argv)
   gp << "set xrange [" << lbound << ":" << ubound << "]" << endl;
   gp << "plot \"data2\" using 1:2:(" << width/2 << "):3 with boxxyerrorbars 3, ";
   gp << "\"data1\" smooth csplines 1" << endl;
-  gp << "set title \"Interval Arithmetic representation"; 
+  gp << "set title \"interval Arithmetic representation"; 
   if (!fin2) gp << "*";
   if (argc==5) gp << " : " << argv[4];
   gp << "\" " << endl;

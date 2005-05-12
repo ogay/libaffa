@@ -95,7 +95,7 @@ int main(int argc, char **argv)
   double min1, max1;
   double min2, max2;
 
-  Interval itv1, itv2;
+  interval itv1, itv2;
   AAF u1, u2, v;  // v = v(u1,u2)
 
   Easyval m1,m2, n;  // n = n(m1,m2)
@@ -178,7 +178,7 @@ int main(int argc, char **argv)
 
     }
 
-  // Interval Arithmetic
+  // interval Arithmetic
 
   fin2 = 1;
 

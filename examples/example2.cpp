@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 
   double min, max;
 
-  Interval itv;
+  interval itv;
   AAF u, v;  // v = v(u)
 
 

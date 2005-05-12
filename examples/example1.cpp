@@ -31,8 +31,8 @@ int main()
 
   //
 
-  Interval u(-2,2);
-  Interval v(-1,1);
+  interval u(-2,2);
+  interval v(-1,1);
   AAF x = u;
   AAF r = v;
   AAF s = v;
