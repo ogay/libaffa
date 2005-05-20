@@ -59,6 +59,7 @@ AAF sin(const AAF & P)
     if (w >= 2*PI ) {
 // the trivial case, the interval is larger than 2*PI
         // y' = 0 , delta = 1 cause -1 <= sin(x) <= +1
+        return AAF(interval(-1,1));
         alpha = 0.0;
         dzeta = 0.0;
         delta = 1.0;
@@ -178,7 +179,7 @@ AAF acosh(const AAF & P) {
 }
 
 AAF asinh(const AAF & P) {
-    if(P.getcenter() < 0)
+    if(P.get_center() < 0)
         return -asinh(-P);
     return(log(P + sqrt(sqr(P) + 1)));
 }

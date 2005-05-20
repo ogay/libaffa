@@ -78,7 +78,8 @@ public:
     friend AAF log(const AAF & P);
     friend AAF sin(const AAF & P);
     friend AAF pow(const AAF & P, double exp);
-
+    friend AAF half_plane(const AAF & P);
+    
     AAF operator - () const;
     AAF operator * (double) const;
 
@@ -87,10 +88,20 @@ public:
     void aafprint() const;
     static void set_default(const unsigned val=0);
     static unsigned inclast();
-    int getlength() const;
-    double getcenter() const;
+    unsigned get_length() const;
+    double get_center() const;
     interval convert() const;
     double rad() const;
+    double get_coeff(unsigned i) const {
+        if(i >= length)
+            return 0;
+        return coefficients[i];
+    }
+    unsigned get_index(unsigned i) const {
+        if(i >= length)
+            return 0;
+        return indexes[i];
+    }
     bool is_indeterminate() const;
     bool is_infinite() const;
     bool is_nan() const;
@@ -121,19 +132,21 @@ AAF acosh(const AAF & P);
 AAF asinh(const AAF & P);
 AAF atanh(const AAF & P);
 
+AAF half_plane(const AAF & P);
+
 // AAF inline functions
 
 // Create a constant AAF of v0
 
 inline AAF:: AAF(double v0):
-    cvalue(v0), length(0),
-    coefficients(NULL), indexes(NULL),special(AAF_TYPE_AFFINE)
+    special(AAF_TYPE_AFFINE), cvalue(v0), length(0),
+    coefficients(NULL), indexes(NULL)
 {
 }
 
 inline AAF:: AAF(AAF_TYPE t):
-    cvalue(0), length(0),
-    coefficients(NULL), indexes(NULL),special(t)
+    special(t),cvalue(0), length(0),
+    coefficients(NULL), indexes(NULL)
 {
 }
 
@@ -156,7 +169,7 @@ inline unsigned AAF:: inclast() {
 // Get the length of an AAF
 // i.e the number of non-null noise symbols
 
-inline int AAF::getlength() const {
+inline unsigned AAF::get_length() const {
     return length;
 }
 

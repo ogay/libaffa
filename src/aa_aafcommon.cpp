@@ -58,7 +58,7 @@ AAF:: AAF(double v0, const double * t1, const unsigned * t2, unsigned T)
 AAF:: AAF(const AAF &P) 
     : special(P.special)
 {
-    unsigned plength = P.getlength();
+    unsigned plength = P.get_length();
     coefficients = new double [plength];
     indexes = new unsigned [plength];
 
@@ -115,7 +115,7 @@ AAF::~AAF()
 AAF & AAF::operator = (const AAF & P)
 {
     special = P.special;
-    unsigned plength = P.getlength();
+    unsigned plength = P.get_length();
     
     if (&P!=this)
     {
@@ -182,7 +182,7 @@ void AAF::aafprint() const
 // but is useful for applications
 
 
-double AAF::getcenter() const
+double AAF::get_center() const
 {
     return cvalue;
 }
@@ -219,6 +219,47 @@ double AAF::rad() const
     return sum;
 
 }
+
+AAF half_plane(const AAF & P) {
+    const double a = P.convert().left(); // [a,b] is our interval
+    const double b = P.convert().right();
+    
+    AAF_TYPE type;
+    if(P.special == AAF_TYPE_NAN)
+        return P;
+    
+    if(a > 0)
+        return P;
+    else if(b < 0) {
+        type = AAF_TYPE_NAN;
+        return AAF(type);
+    }
+    else if(b == 0) {
+        AAF result(0.);
+        result.special = (AAF_TYPE)(AAF_TYPE_AFFINE | AAF_TYPE_NAN);
+        return result;
+    }
+    else if(a <= 0) {
+        AAF result;
+        result.special = (AAF_TYPE)(AAF_TYPE_AFFINE | AAF_TYPE_NAN);
+        unsigned plength = P.get_length();
+        result.coefficients = new double [plength];
+        result.indexes = new unsigned [plength];
+        
+        result.cvalue = b/2;;
+        result.length = plength;
+        
+        double rescale = (b - a)/b;
+        for (unsigned i = 0; i<plength; i++)
+        {
+            result.coefficients[i] = (P.coefficients[i]*b);
+            result.indexes[i] = P.indexes[i];
+        }
+        return result;
+    }
+}
+
+
 /*
   Local Variables:
   mode:c++
