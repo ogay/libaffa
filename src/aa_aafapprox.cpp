@@ -103,7 +103,7 @@ AAF AAF::operator * (const AAF & P) const {
 
 // Operator  /
 // It's a non affine-operation
-// We use the identity x/y = x * (1/y
+// We use the identity x/y = x * (1/y)
 
 AAF AAF::operator / (const AAF & P) const {
     return (*this)*inv(P);
@@ -150,7 +150,7 @@ AAF sqrt(const AAF & P) {
 // Inverse (1/x) operator
 // It's a non-affine operation
 // We use mini-range approximation
-// cause undershoot can be high with Chebyshev here
+// because undershoot can be high with Chebyshev here
 
 AAF inv(const AAF & P) {
     handle_infinity(P);
@@ -234,12 +234,16 @@ AAF exp(const AAF & P) {
     
     const double ea = exp(a);
     const double eb = exp(b);
-    if(ea == INFINITY) {
-        printf("infinity at %g, %g -> (%g, %g)\n", a, b, ea, eb);
+    if((ea == INFINITY) || (eb == INFINITY)) {
+        // Printing from a numeric library is generally frowned apon,
+        // but what to do instead?  This corresponds to an essential 
+        // singularity.
+        //printf("essential infinity at %g, %g -> (%g, %g)\n", a, b, ea, eb);
+        return AAF(interval(-INFINITY, INFINITY));
     }
     
     const double alpha = (eb-ea)/(b-a);
-// alpha is the slope of the line r(x) that
+    // alpha is the slope of the line r(x) that
     // interpolate (a, exp(a)) and (b, exp(b))
     const double xs = log(alpha);// the x of the maximum error
     const double maxdelta = alpha*(xs - 1 - a)+ea;
@@ -249,18 +253,15 @@ AAF exp(const AAF & P) {
 
     // Calculation of the error
     const double delta = maxdelta/2;
-    //printf("(%g, %g, %g) -> (%g, %g) @ (%g*x + %g) e = %g\n", a, xs, b, ea, eb, alpha, dzeta, delta);
 
     return AAF(P, alpha, dzeta, delta, P.special);
 }
 
-// Exponential operator
+// Logarithm operator
 // It's a non affine-operation
 
 AAF log(const AAF & P) {
-    handle_infinity(P); // infinity maps to [0, infty) here
-    // exp(x) is approximated by f(x)=alpha*x+dzeta
-    // delta is the maximum absolute error
+    handle_infinity(P); // infinity needs to map to NaN here
 
     const double a = P.convert().left(); // [a,b] is our interval
     const double b = P.convert().right();
@@ -272,17 +273,17 @@ AAF log(const AAF & P) {
         type = AAF_TYPE_NAN;
         return AAF(type);
     }
-    else if(a <= 0) {// undefined, can we do better?
+    else if(a <= 0) { // undefined, can we do better?
         type = (AAF_TYPE)(AAF_TYPE_AFFINE | AAF_TYPE_NAN);
         return AAF(type);
-// perhaps we should make a = 0+eps and try to continue?
+        // perhaps we should make a = 0+eps and try to continue?
     }
     
     const double la = log(a);
     const double lb = log(b);
     
     const double alpha = (lb-la)/(b-a);
-// alpha is the slope of the line r(x) that
+    // alpha is the slope of the line r(x) that
     // interpolate (a, exp(a)) and (b, exp(b))
     const double xs = 1/(alpha);// the x of the maximum error
     const double ys = (alpha*(xs - a)+la);
@@ -293,8 +294,6 @@ AAF log(const AAF & P) {
 
     // Calculation of the error
     const double delta = maxdelta/2;
-    //printf("(%g, %g, %g) -> (%g, %g, %g) @ (%g*x + %g) e = %g\n", a, xs, b, la, log(xs), lb, alpha, dzeta, delta);
-    //printf("plot [%g:%g] log(x), (%g*x + %g)\n", a, b, alpha, dzeta);
 
     return AAF(P, alpha, dzeta, delta, type);
 }
@@ -307,9 +306,9 @@ AAF log(const AAF & P) {
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0)(inline-open . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:80
   End:
 */
 
 
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
