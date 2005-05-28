@@ -4,7 +4,7 @@
  * Copyright (c) 2004 LIRIS (University Claude Bernard Lyon 1)
  * Copyright (c) 2005 Nathan Hurst
  *
- * This file is part of libaa.
+ * This file is part of libaffa.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,7 +17,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with libaa; if not, write to the Free Software
+ * License along with libaffa; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
@@ -49,19 +49,19 @@ class interval
 
   double left() const;
   double right() const;
-  void modlo(const double low);
-  void modhi(const double high);
-  void modlohi(const double low, const double high);
+  void mod_lo(const double low);
+  void mod_hi(const double high);
+  void mod_lo_hi(const double low, const double high);
   double mid() const;
   double radius() const;
   double width() const;
-  void intvprint() const;
+  void int_vprint() const;
 
   bool straddles_zero() const;
 };
 
 std::ostream & operator << (std::ostream & s, const interval &I);
-interval mintrigo( const interval &I);
+interval min_trigo( const interval &I);
 
 
 // interval inline functions

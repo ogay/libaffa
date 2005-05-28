@@ -6,6 +6,21 @@ Feel free to send comments or bug reports to olivier.gay@epfl.ch or david.coeurj
 CHANGES
 -------
 
+libaffa-0.9.5
+May 28, 2005
+Nathan Hurst
+
+ * Non-release, renamed project to libaffa to reduce confusion against aalib.
+
+libaa-cvs
+20050501
+Nathan Hurst
+
+ * Implemented common operations
+ * Improved pow(AAF, int) performance
+ * Fixed inv() around zero
+ * Renamed interval to allow testing against gaol.
+
 libaa-0.9.5
 December, 17th 2004
 David Coeurjolly

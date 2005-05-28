@@ -1825,7 +1825,7 @@ fi
 
 
 # Define the identity of the package.
- PACKAGE=libaa
+ PACKAGE=libaffa
  VERSION=$AAF_VERSION
 
 

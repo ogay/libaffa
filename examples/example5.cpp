@@ -2,7 +2,7 @@
  * example5.cpp -- Time performances between AA and IA model
  * Copyright (c) 2003 EPFL (Ecole Polytechnique Federale de Lausanne)
  *
- * This file is part of libaa.
+ * This file is part of libaffa.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -15,7 +15,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with libaa; if not, write to the Free Software
+ * License along with libaffa; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
@@ -38,7 +38,7 @@
  * template fct eval_fct()
  *
  * Compile : g++ -laa lEasyval example5.cpp -o example5
- * (requires libaa and libEasyval)
+ * (requires libaffa and libEasyval)
  *
  * (C) 2003 Olivier Gay <olivier.gay@epfl.ch>
 */
@@ -156,7 +156,7 @@ int main(int argc, char **argv)
 
 
       ydelta = v.rad();
-      y = v.getcenter();
+      y = v.get_center();
 
     }
 

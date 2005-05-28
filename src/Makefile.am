@@ -1,6 +1,6 @@
-lib_LTLIBRARIES = libaa.la
-libaa_la_SOURCES = aa_rounding.cpp aa_interval.cpp aa_aaftrigo.cpp aa_aafapprox.cpp aa_aafarithm.cpp aa_aafcommon.cpp
-libaa_la_LDFLAGS =      \
+lib_LTLIBRARIES = libaffa.la
+libaffa_la_SOURCES = aa_rounding.cpp aa_interval.cpp aa_aaftrigo.cpp aa_aafapprox.cpp aa_aafarithm.cpp aa_aafcommon.cpp
+libaffa_la_LDFLAGS =      \
 	-release $(LT_RELEASE)  \
         -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 

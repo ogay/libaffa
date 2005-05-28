@@ -3,7 +3,7 @@
  * Copyright (c) 2003 EPFL (Ecole Polytechnique Federale de Lausanne)
  * Copyright (c) 2004 LIRIS (University Claude Bernard Lyon 1)
  *
- * This file is part of libaa.
+ * This file is part of libaffa.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,7 +16,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with libaa; if not, write to the Free Software
+ * License along with libaffa; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
