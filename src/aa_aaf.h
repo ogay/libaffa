@@ -102,6 +102,7 @@ public:
             return 0;
         return indexes[i];
     }
+    double index_coeff(unsigned index) const;
     bool is_indeterminate() const;
     bool is_infinite() const;
     bool is_nan() const;

@@ -144,7 +144,7 @@ AAF & AAF::operator = (const AAF & P)
     return *this;
 }
 
-
+#if 0
 // Ostream output of an AAF
 
 std::ostream & operator << (std::ostream & s, const AAF &P)
@@ -162,6 +162,23 @@ std::ostream & operator << (std::ostream & s, const AAF &P)
 
 }
 
+#else
+// Ostream output of an AAF
+
+std::ostream & operator << (std::ostream & s, const AAF &P)
+{
+
+    // s.setf(0, ios_base::floatfield);
+    s << P.cvalue ;
+
+    for (unsigned i=0; i < P.length ; i++)
+        s << " + " << P.coefficients[i] << "e" << P.indexes[i];
+    
+    s << " [" << P.length << "]";
+    return s;
+
+}
+#endif
 
 // Print length and coefficients of an AAF to stdout
 
@@ -259,6 +276,12 @@ AAF half_plane(const AAF & P) {
     }
 }
 
+double AAF::index_coeff(unsigned index) const {
+    for(int i = 0; i < length; i++)
+        if(indexes[i] == index)
+            return coefficients[i];
+    return 0;
+}
 
 /*
   Local Variables:

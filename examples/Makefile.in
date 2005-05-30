@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-SOURCES = $(example1_SOURCES) $(example2_SOURCES) $(example3_SOURCES) $(example4_SOURCES) $(example5_SOURCES) $(example6_SOURCES)
+SOURCES = $(example1_SOURCES) $(example2_SOURCES) $(example6_SOURCES) $(example7_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -37,8 +37,7 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 noinst_PROGRAMS = example1$(EXEEXT) example2$(EXEEXT) \
-	example6$(EXEEXT) example3$(EXEEXT) example4$(EXEEXT) \
-	example5$(EXEEXT)
+	example6$(EXEEXT) example7$(EXEEXT)
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/../depcomp \
 	$(srcdir)/../install-sh $(srcdir)/../missing \
@@ -60,18 +59,12 @@ example1_DEPENDENCIES =
 am_example2_OBJECTS = example2.$(OBJEXT)
 example2_OBJECTS = $(am_example2_OBJECTS)
 example2_DEPENDENCIES =
-am_example3_OBJECTS = example3.$(OBJEXT)
-example3_OBJECTS = $(am_example3_OBJECTS)
-example3_DEPENDENCIES =
-am_example4_OBJECTS = example4.$(OBJEXT)
-example4_OBJECTS = $(am_example4_OBJECTS)
-example4_DEPENDENCIES =
-am_example5_OBJECTS = example5.$(OBJEXT)
-example5_OBJECTS = $(am_example5_OBJECTS)
-example5_DEPENDENCIES =
 am_example6_OBJECTS = example6.$(OBJEXT)
 example6_OBJECTS = $(am_example6_OBJECTS)
 example6_DEPENDENCIES =
+am_example7_OBJECTS = example7.$(OBJEXT)
+example7_OBJECTS = $(am_example7_OBJECTS)
+example7_DEPENDENCIES =
 DEFAULT_INCLUDES = -I. -I$(srcdir)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -80,11 +73,10 @@ CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
-SOURCES = $(example1_SOURCES) $(example2_SOURCES) $(example3_SOURCES) \
-	$(example4_SOURCES) $(example5_SOURCES) $(example6_SOURCES)
+SOURCES = $(example1_SOURCES) $(example2_SOURCES) $(example6_SOURCES) \
+	$(example7_SOURCES)
 DIST_SOURCES = $(example1_SOURCES) $(example2_SOURCES) \
-	$(example3_SOURCES) $(example4_SOURCES) $(example5_SOURCES) \
-	$(example6_SOURCES)
+	$(example6_SOURCES) $(example7_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -173,6 +165,10 @@ example2_SOURCES = example2.cpp
 example2_LDADD = -laffa
 example6_SOURCES = example6.cpp
 example6_LDADD = -laffa
+example7_SOURCES = example7.cpp
+example7_LDADD = -laffa
+
+# these require Easyval
 example3_SOURCES = example3.cpp
 example3_LDADD = -laffa -lEasyval
 example4_SOURCES = example4.cpp
@@ -225,18 +221,12 @@ example1$(EXEEXT): $(example1_OBJECTS) $(example1_DEPENDENCIES)
 example2$(EXEEXT): $(example2_OBJECTS) $(example2_DEPENDENCIES) 
 	@rm -f example2$(EXEEXT)
 	$(CXXLINK) $(example2_LDFLAGS) $(example2_OBJECTS) $(example2_LDADD) $(LIBS)
-example3$(EXEEXT): $(example3_OBJECTS) $(example3_DEPENDENCIES) 
-	@rm -f example3$(EXEEXT)
-	$(CXXLINK) $(example3_LDFLAGS) $(example3_OBJECTS) $(example3_LDADD) $(LIBS)
-example4$(EXEEXT): $(example4_OBJECTS) $(example4_DEPENDENCIES) 
-	@rm -f example4$(EXEEXT)
-	$(CXXLINK) $(example4_LDFLAGS) $(example4_OBJECTS) $(example4_LDADD) $(LIBS)
-example5$(EXEEXT): $(example5_OBJECTS) $(example5_DEPENDENCIES) 
-	@rm -f example5$(EXEEXT)
-	$(CXXLINK) $(example5_LDFLAGS) $(example5_OBJECTS) $(example5_LDADD) $(LIBS)
 example6$(EXEEXT): $(example6_OBJECTS) $(example6_DEPENDENCIES) 
 	@rm -f example6$(EXEEXT)
 	$(CXXLINK) $(example6_LDFLAGS) $(example6_OBJECTS) $(example6_LDADD) $(LIBS)
+example7$(EXEEXT): $(example7_OBJECTS) $(example7_DEPENDENCIES) 
+	@rm -f example7$(EXEEXT)
+	$(CXXLINK) $(example7_LDFLAGS) $(example7_OBJECTS) $(example7_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -246,10 +236,8 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/example1.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/example2.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/example3.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/example4.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/example5.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/example6.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/example7.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
