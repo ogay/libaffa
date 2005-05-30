@@ -1,0 +1,3 @@
+To build, run autoreconf && ./configure --options && make
+
+To install, make install
