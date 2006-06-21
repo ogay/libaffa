@@ -1,7 +1,7 @@
 Libaa is a C++ Affine Arithmetic library for GNU/Linux
-The latest Version of libaa can be downloadead from http://savannah.nongnu.org/projects/libaa/
+The latest Version of libaa can be downloaded from http://www.nongnu.org/libaffa/
 
-Feel free to send comments or bug reports to olivier.gay@epfl.ch or david.coeurjolly@liris.cnrs.fr
+Feel free to send comments or bug reports to olivier.gay@a3.epfl.ch or david.coeurjolly@liris.cnrs.fr
 
 CHANGES
 -------
@@ -29,7 +29,7 @@ David Coeurjolly
 
 
 libaa-0.9.4
-February, 6th 2003 
+February, 6th 2003
 Olivier Gay
 
   * The first version of the lib provided by Olivier Gay

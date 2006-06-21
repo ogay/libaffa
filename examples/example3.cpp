@@ -52,7 +52,7 @@
  * Compile : g++ -laa lEasyval example3.cpp -o example3
  * (requires libaffa and libEasyval)
  *
- * (C) 2003 Olivier Gay <olivier.gay@epfl.ch>
+ * (C) 2003 Olivier Gay <olivier.gay@a3.epfl.ch>
 */
 
 #include <cstdio>

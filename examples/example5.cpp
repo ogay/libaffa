@@ -40,7 +40,7 @@
  * Compile : g++ -laa lEasyval example5.cpp -o example5
  * (requires libaffa and libEasyval)
  *
- * (C) 2003 Olivier Gay <olivier.gay@epfl.ch>
+ * (C) 2003 Olivier Gay <olivier.gay@e3.pfl.ch>
 */
 
 #include <cstdio>

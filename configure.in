@@ -26,7 +26,7 @@ AC_SUBST(LT_AGE)
 
 AM_INIT_AUTOMAKE(libaffa, $AAF_VERSION)
 AC_PROG_CXX
-CXXFLAGS="-O9 -funroll-loops -fomit-frame-pointer -fno-exceptions"
+CXXFLAGS="-O2 -funroll-loops -fomit-frame-pointer -fno-exceptions"
 AC_PROG_LIBTOOL
 AM_PROG_LIBTOOL
 

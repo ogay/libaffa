@@ -38,8 +38,8 @@
  * Compile : g++ -laa lEasyval example4.cpp -o example4
  * (requires libaffa and libEasyval)
  *
- * (C) 2003 Olivier Gay <olivier.gay@epfl.ch>
-*/
+ * (C) 2003 Olivier Gay <olivier.gay@a3.epfl.ch>
+ */
 
 #include <cstdio>
 #include <cmath>

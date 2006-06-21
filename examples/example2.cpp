@@ -47,7 +47,7 @@
  *
  * Compile : g++ -laa example2.cpp -o example2
  *
- * (C) 2003 Olivier Gay <olivier.gay@epfl.ch>
+ * (C) 2003 Olivier Gay <olivier.gay@a3.epfl.ch>
  */
 
 #include <cstdio>
