@@ -1,6 +1,6 @@
-# Makefile.in generated automatically by automake 1.4-p4 from Makefile.am
+# Makefile.in generated automatically by automake 1.4-p6 from Makefile.am
 
-# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -65,14 +65,23 @@ AAF_MAJOR_VERSION = @AAF_MAJOR_VERSION@
 AAF_MICRO_VERSION = @AAF_MICRO_VERSION@
 AAF_MINOR_VERSION = @AAF_MINOR_VERSION@
 AAF_VERSION = @AAF_VERSION@
+AR = @AR@
 AS = @AS@
 CC = @CC@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
+EGREP = @EGREP@
 EXEEXT = @EXEEXT@
+F77 = @F77@
+GCJ = @GCJ@
+GCJFLAGS = @GCJFLAGS@
+HAVE_LIB = @HAVE_LIB@
+LIB = @LIB@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
+LTLIB = @LTLIB@
 LT_AGE = @LT_AGE@
 LT_CURRENT = @LT_CURRENT@
 LT_RELEASE = @LT_RELEASE@
@@ -82,12 +91,13 @@ OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
+RC = @RC@
 STRIP = @STRIP@
 VERSION = @VERSION@
 
-lib_LTLIBRARIES = libaa.la
-libaa_la_SOURCES = aa_rounding.cpp aa_interval.cpp aa_aaftrigo.cpp aa_aafapprox.cpp aa_aafarithm.cpp aa_aafcommon.cpp
-libaa_la_LDFLAGS =  	-release $(LT_RELEASE)          -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
+lib_LTLIBRARIES = libaffa.la
+libaffa_la_SOURCES = aa_rounding.cpp aa_interval.cpp aa_aaftrigo.cpp aa_aafapprox.cpp aa_aafarithm.cpp aa_aafcommon.cpp
+libaffa_la_LDFLAGS =  	-release $(LT_RELEASE)          -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
 
 include_HEADERS = aa.h aa_aaf.h aa_interval.h
@@ -101,8 +111,8 @@ DEFS = @DEFS@ -I. -I$(srcdir)
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-libaa_la_LIBADD = 
-libaa_la_OBJECTS =  aa_rounding.lo aa_interval.lo aa_aaftrigo.lo \
+libaffa_la_LIBADD = 
+libaffa_la_OBJECTS =  aa_rounding.lo aa_interval.lo aa_aaftrigo.lo \
 aa_aafapprox.lo aa_aafarithm.lo aa_aafcommon.lo
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -121,14 +131,14 @@ GZIP_ENV = --best
 DEP_FILES =  .deps/aa_aafapprox.P .deps/aa_aafarithm.P \
 .deps/aa_aafcommon.P .deps/aa_aaftrigo.P .deps/aa_interval.P \
 .deps/aa_rounding.P
-SOURCES = $(libaa_la_SOURCES)
-OBJECTS = $(libaa_la_OBJECTS)
+SOURCES = $(libaffa_la_SOURCES)
+OBJECTS = $(libaffa_la_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .cpp .lo .o .obj .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --foreign src/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
@@ -198,8 +208,8 @@ distclean-libtool:
 
 maintainer-clean-libtool:
 
-libaa.la: $(libaa_la_OBJECTS) $(libaa_la_DEPENDENCIES)
-	$(CXXLINK) -rpath $(libdir) $(libaa_la_LDFLAGS) $(libaa_la_OBJECTS) $(libaa_la_LIBADD) $(LIBS)
+libaffa.la: $(libaffa_la_OBJECTS) $(libaffa_la_DEPENDENCIES)
+	$(CXXLINK) -rpath $(libdir) $(libaffa_la_LDFLAGS) $(libaffa_la_OBJECTS) $(libaffa_la_LIBADD) $(LIBS)
 .cpp.o:
 	$(CXXCOMPILE) -c $<
 .cpp.obj:
@@ -240,7 +250,7 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
 	  awk '    { files[$$0] = 1; } \
 	       END { for (i in files) print i; }'`; \
 	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
-	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
+	  || (cd $(srcdir) && etags -o $$here/TAGS $(ETAGS_ARGS) $$tags  $$unique $(LISP))
 
 mostlyclean-tags:
 
@@ -260,7 +270,7 @@ distdir: $(DISTFILES)
 	top_distdir=`cd $(top_distdir) && pwd`; \
 	distdir=`cd $(distdir) && pwd`; \
 	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --foreign src/Makefile
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
