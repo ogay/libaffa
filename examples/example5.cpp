@@ -14,9 +14,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with libaffa; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with libaffa; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 /* This is a program to compare precison between
@@ -25,9 +25,9 @@
  * Results are in seconds, with an accuracy of 10 ms
  *
  * We use libEasyval by Johan Vervloet and Stefan Becuwe for the IA model
- * 
- * This example is written for a function y=f(x1,x2) but it can be easyly changed
- * to use with a higher number of variables
+ *
+ * This example is written for a function y=f(x1,x2) but it can be easyly
+ * changed to use with a higher number of variables
  *
  * Usage: ./example5 LOWER_BOUND1 UPPER_BOUND1 LOWER_BOUND2 UPPER_BOUND2 BOXN
  *
@@ -93,8 +93,8 @@ int main(int argc, char **argv)
 
   double ydelta; // the y error
 
-  double y; 
- 
+  double y;
+
 
   interval itv1, itv2;
   AAF u1, u2, v;  // v = v(u1,u2)
@@ -102,9 +102,11 @@ int main(int argc, char **argv)
   Easyval m1,m2, n;  // n = n(m1,m2)
 
 
-  if (argc != 6) 
+  if (argc != 6)
     {
-      cout << "Usage: " << argv[0] << " LOWER_BOUND1 UPPER_BOUND1 LOWER_BOUND2 UPPER_BOUND2 BOXN" << endl;
+      cout << "Usage: " << argv[0]
+          << " LOWER_BOUND1 UPPER_BOUND1 LOWER_BOUND2 "
+             " UPPER_BOUND2 BOXN" << endl;
       return 0;
     }
 
@@ -116,7 +118,7 @@ int main(int argc, char **argv)
 
 
 
-  boxn = atoi(argv[5]); //
+  boxn = atoi(argv[5]);
 
   if ((lbound1 > ubound1)||(lbound2 > ubound2))
     {
@@ -127,7 +129,7 @@ int main(int argc, char **argv)
   width1 = (ubound1-lbound1)/boxn;
   width2 = (ubound2-lbound2)/boxn;
 
-  cout << "Time performances between AA and IA models" << endl; 
+  cout << "Time performances between AA and IA models" << endl;
 
   // AA
 
@@ -180,16 +182,16 @@ int main(int argc, char **argv)
       x2_b=x2_a+width2;
       m2.set(x2_a,x2_b);
 
-      n=eval_fct(m1,m2);   
+      n=eval_fct(m1,m2);
 
       y = n.midpoint();
-      ydelta = n.getSup()-y; 
+      ydelta = n.getSup()-y;
     }
 
   tstop2 = times(&tmsave);
 
   total2 = (double) (tstop2-tstart2)/100;
-  
+
 
   cout << "AA: "<< total1 << "s " << endl;
   cout << "IA: "<< total2 << "s " << endl;

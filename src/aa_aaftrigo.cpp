@@ -16,9 +16,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with libaffa; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with libaffa; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 
@@ -55,7 +55,7 @@ AAF sin(const AAF & P)
     // approximate y = sin(x)
 
     double alpha, dzeta, delta;
-    
+
     if (w >= 2*PI ) {
 // the trivial case, the interval is larger than 2*PI
         // y' = 0 , delta = 1 cause -1 <= sin(x) <= +1
@@ -68,7 +68,7 @@ AAF sin(const AAF & P)
         double x[NPTS];
         double y[NPTS];
         double r[NPTS]; // residues, r[i] = y[i]-y'[i]
-        
+
         x[0] = a;
         y[0] = sin(a);
         x[NPTS-1] = b;
@@ -79,18 +79,18 @@ AAF sin(const AAF & P)
         for (unsigned i=1; i< NPTS-1; i++) {
             x[i] = x[i-1]+pas;
             y[i] = sin(x[i]);
-	}
+        }
 
 
         // Calculation of xm and ym , averages of x and y
 
         double xm = 0;
         double ym = 0;
-        
+
         for (unsigned i=0; i<NPTS; i++) {
             xm = xm + x[i];
             ym = ym + y[i];
-	}
+        }
 
         xm = xm/NPTS;
         ym = ym/NPTS;
@@ -104,7 +104,7 @@ AAF sin(const AAF & P)
             const double temp1 = x[i] - xm;
             alpha += y[i]*temp1;
             temp2 += temp1*temp1;
-	}
+        }
 
         alpha = alpha/temp2;  // final alpha
         dzeta = ym - alpha*xm; // final dzeta
@@ -113,9 +113,9 @@ AAF sin(const AAF & P)
         // Calculation of the residues
         // We use the absolute value of the residues!
 
-        for (unsigned i = 0; i < NPTS; i++)	{
+        for (unsigned i = 0; i < NPTS; i++) {
             r[i] = fabs(y[i] - (dzeta+alpha*x[i]));
-	}
+        }
 
 
         // The error delta is the maximum

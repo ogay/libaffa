@@ -14,9 +14,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with libaffa; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with libaffa; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #ifndef AA_UTIL
@@ -24,9 +24,11 @@
 
 #include "aa_aaf.h"
 #define handle_infinity(x) {\
-	if((x).get_special() == AAF_TYPE_NAN) return AAF(AAF_TYPE_NAN); \
-	if((x).get_special() == AAF_TYPE_INFINITE) return AAF(interval(-INFINITY, INFINITY)); \
-	}
+    if ((x).get_special() == AAF_TYPE_NAN) \
+        return AAF(AAF_TYPE_NAN); \
+    if ((x).get_special() == AAF_TYPE_INFINITE) \
+        return AAF(interval(-HUGE_VAL, HUGE_VAL)); \
+}
 
 inline static AAF_TYPE binary_special(AAF_TYPE a, AAF_TYPE b) {
     if((a == AAF_TYPE_AFFINE) &&

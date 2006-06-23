@@ -14,24 +14,24 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with libaffa; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with libaffa; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 /* This is a program to compare precison between
  * the AA model and the IA model
  *
- * We use libEasyval by Johan Vervloet and Stefan Becuwe for the IA model 
+ * We use libEasyval by Johan Vervloet and Stefan Becuwe for the IA model
  *
- * This example is written for a function y=f(x1,x2) but it can be easyly changed
- * to use with a higher number of variables
+ * This example is written for a function y=f(x1,x2) but it can be easyly
+ * changed to use with a higher number of variables
  *
  * Usage: ./example4 LOWER_BOUND1 UPPER_BOUND1 LOWER_BOUND2 UPPER_BOUND2 BOXN
  *
  * It means [LOWER_BOUNDi,UPPERBOUNDi] is the interval of variables xi divided
  * in BOXN sud-divisions (boxes)
- * 
+ *
  * If you want to change the function to display, you can change it in the
  * template fct eval_fct()
  *
@@ -86,10 +86,10 @@ int main(int argc, char **argv)
   double ydelta; // the y error
 
   double ydelta_tot1;// sum of ydelta for aa
-  double ydelta_tot2;// sum of ydelta for ia 
+  double ydelta_tot2;// sum of ydelta for ia
 
-  double y; 
-  bool fin1, fin2;  
+  double y;
+  bool fin1, fin2;
   bool finy, finydelta;
 
   double min1, max1;
@@ -101,9 +101,11 @@ int main(int argc, char **argv)
   Easyval m1,m2, n;  // n = n(m1,m2)
 
 
-  if (argc != 6) 
+  if (argc != 6)
     {
-      cout << "Usage: " << argv[0] << " LOWER_BOUND1 UPPER_BOUND1 LOWER_BOUND2 UPPER_BOUND2 BOXN" << endl;
+      cout << "Usage: " << argv[0];
+      cout << " LOWER_BOUND1 UPPER_BOUND1 LOWER_BOUND2 "
+              "UPPER_BOUND2 BOXN" << endl;
       return 0;
     }
 
@@ -115,7 +117,7 @@ int main(int argc, char **argv)
 
 
 
-  boxn = atoi(argv[5]); //
+  boxn = atoi(argv[5]);
 
   if ((lbound1 > ubound1)||(lbound2 > ubound2))
     {
@@ -169,12 +171,12 @@ int main(int argc, char **argv)
       finydelta = finite(ydelta);
 
       if (finy && finydelta)
-	{
-	  if (min1 > y-ydelta) min1=y-ydelta;
-	  if (max1 < y+ydelta) max1=y+ydelta;
-	}
+      {
+          if (min1 > y-ydelta) min1=y-ydelta;
+          if (max1 < y+ydelta) max1=y+ydelta;
+      }
       else
-	fin1=0;
+          fin1=0;
 
     }
 
@@ -201,10 +203,10 @@ int main(int argc, char **argv)
       x2_b=x2_a+width2;
       m2.set(x2_a,x2_b);
 
-      n=eval_fct(m1,m2);   
+      n=eval_fct(m1,m2);
 
       y = n.midpoint();
-      ydelta = n.getSup()-y; 
+      ydelta = n.getSup()-y;
       ydelta_tot2 += ydelta;
 
       // We check if we calculated a non-finite value
@@ -214,25 +216,29 @@ int main(int argc, char **argv)
       finydelta = finite(ydelta);
 
       if (finy && finydelta)
-	{
-	  if (min2 > y-ydelta) min2=y-ydelta;
-	  if (max2 < y+ydelta) max2=y+ydelta;
-	}
+      {
+          if (min2 > y-ydelta) min2=y-ydelta;
+          if (max2 < y+ydelta) max2=y+ydelta;
+      }
       else
-	fin2=0;
+          fin2=0;
 
     }
- 
+
   double area_AA = (max1-min1);
   double area_IA = (max2-min2);
 
 
-  cout << "IA: [" << min2 << ":" << max2 << "], " << max2-min2 << ", 100% , 100%" << endl;
-  cout << "AA: [" << min1 << ":" << max1 << "], " << max1-min1 << ", " << 100*(area_AA/area_IA) << "% , " << 100*(ydelta_tot1/ydelta_tot2) << "%" << endl;
+  cout << "IA: [" << min2 << ":" << max2 << "], " << max2-min2
+       << ", 100% , 100%" << endl;
+  cout << "AA: [" << min1 << ":" << max1 << "], " << max1-min1
+       << ", " << 100*(area_AA/area_IA) << "% , "
+       << 100*(ydelta_tot1/ydelta_tot2) << "%" << endl;
 
   if (!(fin1 && fin2))
     {
-      cout << "There are some infinite or NaN values so statistics are not reliable" << endl;
+      cout << "There are some infinite or NaN values so "
+              "statistics are not reliable" << endl;
     }
 
   cout << endl;
@@ -240,20 +246,4 @@ int main(int argc, char **argv)
   exit(0);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

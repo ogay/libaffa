@@ -16,9 +16,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with libaffa; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with libaffa; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 
@@ -45,7 +45,7 @@ AAF AAF::operator * (const AAF & P) const {
     unsigned * pu2 = id2;
 
     AAF Temp(cvalue*P.cvalue);  // Create our resulting AAF
-    
+
     Temp.indexes = new unsigned [l1+l2+1];
     unsigned * idtemp=Temp.indexes;
 
@@ -69,18 +69,18 @@ AAF AAF::operator * (const AAF & P) const {
         unsigned b = pu2-id2;
 
         if (a==l1 || id1[a]!=idtemp[i])
-	{
+        {
             vatempg[i] = cvalue*va2[b];  // cvalue*va2[b]+(P.cvalue)*0
             pu2++;
             continue;
-	}
+        }
 
         if (b==l2 || id2[b]!=idtemp[i])
-	{
+        {
             vatempg[i] = (P.cvalue)*va1[a];  // cvalue*0+(P.cvalue)*va1[a]
             pu1++;
             continue;
-	}
+        }
 
         vatempg[i] = cvalue*va2[b] + (P.cvalue)*va1[a];
         pu1++;
@@ -95,7 +95,7 @@ AAF AAF::operator * (const AAF & P) const {
     Temp.coefficients[ltemp]=rad()*(P.rad());
 
     Temp.special = binary_special(special, P.special);
-    
+
     return Temp;
 
 }
@@ -129,7 +129,7 @@ AAF sqrt(const AAF & P) {
     else if(a < 0) // undefined, can we do better?
         type = (AAF_TYPE)(AAF_TYPE_AFFINE | AAF_TYPE_NAN);
     //type = (AAF_TYPE)(type | P.special);
-    
+
     const double t = (sqrt(a)+sqrt(b));
 
 
@@ -156,18 +156,15 @@ AAF inv(const AAF & P) {
     handle_infinity(P);
     double a = P.convert().left();
     double b = P.convert().right();
-    if(P.is_infinite() || (a <= 0) && (b >= 0)) {
-        return AAF(interval(-INFINITY, INFINITY));
+    if (P.is_infinite() || (a <= 0) && (b >= 0)) {
+        return AAF(interval(-HUGE_VAL, HUGE_VAL));
     }
-
-    // a := min(abs(a), abs(b))
-    // b := max(abs(a), abs(b))
 
     const double t1 = fabs(a);
     const double t2 = fabs(b);
 
-    a= t1 <? t2;  // min(t1,t2)
-    b= t1 >? t2;  // max(t1,t2)
+    a = std::min(t1, t2);
+    b = std::max(t1, t2);
 
     // Derivative of 1/x is -1/x*x
 
@@ -188,7 +185,7 @@ AAF abs(const AAF & P) {
         AAF Temp(P);
         Temp.cvalue = fabs(Temp.cvalue)/2;
         Temp.special = P.special;
-        
+
         for (unsigned i=0; i<P.length; i++)
             Temp.coefficients[i]=(Temp.coefficients[i])/2;
         return Temp;
@@ -231,17 +228,17 @@ AAF exp(const AAF & P) {
 
     const double a = P.convert().left(); // [a,b] is our interval
     const double b = P.convert().right();
-    
+
     const double ea = exp(a);
     const double eb = exp(b);
-    if((ea == INFINITY) || (eb == INFINITY)) {
+    if ((ea == HUGE_VAL) || (eb == HUGE_VAL)) {
         // Printing from a numeric library is generally frowned apon,
-        // but what to do instead?  This corresponds to an essential 
+        // but what to do instead?  This corresponds to an essential
         // singularity.
         //printf("essential infinity at %g, %g -> (%g, %g)\n", a, b, ea, eb);
-        return AAF(interval(-INFINITY, INFINITY));
+        return AAF(interval(-HUGE_VAL, HUGE_VAL));
     }
-    
+
     const double alpha = (eb-ea)/(b-a);
     // alpha is the slope of the line r(x) that
     // interpolate (a, exp(a)) and (b, exp(b))
@@ -265,7 +262,7 @@ AAF log(const AAF & P) {
 
     const double a = P.convert().left(); // [a,b] is our interval
     const double b = P.convert().right();
-    
+
     AAF_TYPE type;
     if(a > 0)
         type = AAF_TYPE_AFFINE;
@@ -278,10 +275,10 @@ AAF log(const AAF & P) {
         return AAF(type);
         // perhaps we should make a = 0+eps and try to continue?
     }
-    
+
     const double la = log(a);
     const double lb = log(b);
-    
+
     const double alpha = (lb-la)/(b-a);
     // alpha is the slope of the line r(x) that
     // interpolate (a, exp(a)) and (b, exp(b))

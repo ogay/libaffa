@@ -15,9 +15,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with libaffa; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with libaffa; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 /* This is a program to display AA
@@ -34,13 +34,13 @@
  * It means we use an [LOWER_BOUND:UPPERBOUND] interval divided
  * in BOXN sud-divisions (boxes) and [function] is an optionnaly
  * function to display in the gnuplot titles
- * 
+ *
  * If you want to change the function to display, you can change it in the
  * template fct eval_fct()
  *
  * In the gnuplot display a star after the title indicate
  * that a missing box in the plot is due to a non-finite value
- * (either infinite or nan) during the caculation  
+ * (either infinite or nan) during the caculation
  *
  * Otherwise a missing box indicate a very small height
  * of the box.
@@ -81,8 +81,8 @@ int main(int argc, char **argv) {
 
 
     if (argc < 4) {
-        cout << "Usage: " << argv[0] 
-             << " LOWER_BOUND UPPER_BOUND BOXN [function]" 
+        cout << "Usage: " << argv[0]
+             << " LOWER_BOUND UPPER_BOUND BOXN [function]"
              << endl;
         return 0;
     }
@@ -92,7 +92,8 @@ int main(int argc, char **argv) {
     const unsigned boxn = atoi(argv[3]); // number of boxes
 
     if (lbound > ubound) {
-        cerr << "The lower bound must be smaller than the upper bound!" << endl;
+        cerr << "The lower bound must be smaller than the upper bound!";
+        cerr << endl;
         return -1;
     }
 
@@ -149,9 +150,9 @@ int main(int argc, char **argv) {
         const double xc = (x1 + x2)/2;
 
         interval itv(x1,x2);
-        
+
         // v = v(u)
-        
+
         AAF u = itv;
         AAF v = eval_fct(u);
 
@@ -204,9 +205,9 @@ int main(int argc, char **argv) {
         gp << " : " << argv[4];
     gp <<  "\" " << endl;
     gp << "set xrange [" << lbound << ":" << ubound << "]" << endl;
-    gp << "plot \"data2\" using 1:2:(" << width/2 
+    gp << "plot \"data2\" using 1:2:(" << width/2
        << "):3 with boxxyerrorbars 3, ";
-    gp << "\"data1\" smooth csplines 1" << endl;  
+    gp << "\"data1\" smooth csplines 1" << endl;
     gp.close();
 
     cout << "Execute plot.sh to display the result" << endl;

@@ -29,52 +29,54 @@ AAF project(const AAF& result, const AAF& x) {
 }
 
 int main() {
-    AAF dummy1(interval(-1e-10, 1e-10)); // move away from zero to help detect bugs.
-    
+    AAF dummy1(interval(-1e-10, 1e-10)); // move away from zero to
+                                         // help detect bugs.
+
     AAF x(interval(1.2, 1.5));
 
     AAF result = x*x - 2;
-  
-    std::cout << "x = " << x 
+
+    std::cout << "x = " << x
               << std::endl;
-    
-    std::cout << result 
+
+    std::cout << result
               << (result.straddles_zero()?
                   " contains zero":
                   " does not contain zero")
               << std::endl;
-    
-    std::cout << "result_x = " << measure_dim_gradient(result, x) 
+
+    std::cout << "result_x = " << measure_dim_gradient(result, x)
               << std::endl;
-  
-    std::cout << "new x = " << project(result, x) << project(result, x).convert()
+
+    std::cout << "new x = " << project(result, x)
+              << project(result, x).convert()
               << std::endl;
-    
+
     std::cout << "Trial 2, 2 dimensions\n";
-    
+
     AAF y(interval(0.5, 1.));
 
     result = x*y - 1;
-  
-    std::cout << "y = " << y 
+
+    std::cout << "y = " << y
               << std::endl;
-    
-    std::cout << result 
+
+    std::cout << result
               << (result.straddles_zero()?
                   " contains zero":
                   " does not contain zero")
               << std::endl;
-    
-    std::cout << "result_x = " << measure_dim_gradient(result, x) 
+
+    std::cout << "result_x = " << measure_dim_gradient(result, x)
               << std::endl;
-    std::cout << "result_y = " << measure_dim_gradient(result, y) 
+    std::cout << "result_y = " << measure_dim_gradient(result, y)
               << std::endl;
-  
+
     AAF proj = project(project(result, x), y) * x;
-    
+
     std::cout << "new x = " << proj << proj.convert()
               << std::endl;
-    
+
     return 0;
 }
 

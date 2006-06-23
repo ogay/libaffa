@@ -1,6 +1,6 @@
 /*
- * example3.cpp -- This example generates datas and commands of the IA and the AA model
- * to gnuplot to display, it also write statistics
+ * example3.cpp -- This example generates datas and commands of the IA
+ * and the AA model to gnuplot to display, it also writes statistics
  * Copyright (c) 2003 EPFL (Ecole Polytechnique Federale de Lausanne)
  *
  * This file is part of libaffa.
@@ -15,15 +15,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with libaffa; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with libaffa; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 /* This is a program to compare precison between
  * the AA model and the IA model
  *
- * We use libEasyval by Johan Vervloet and Stefan Becuwe for the IA model 
+ * We use libEasyval by Johan Vervloet and Stefan Becuwe for the IA model
  *
  * You'll need gnuplot to display the datas
  *
@@ -44,7 +44,7 @@
  *
  * In the gnuplot display a star after the title indicate
  * that a missing box in the plot is due to a non-finite value
- * (either infinite or nan) during the caculation  
+ * (either infinite or nan) during the caculation
  *
  * Otherwise a missing box indicate a very small height
  * of the box.
@@ -96,10 +96,10 @@ int main(int argc, char **argv)
   double ydelta; // the y error
 
   double ydelta_tot1;// sum of ydelta for aa
-  double ydelta_tot2;// sum of ydelta for ia 
+  double ydelta_tot2;// sum of ydelta for ia
 
-  double x, y; 
-  bool fin1, fin2;  
+  double x, y;
+  bool fin1, fin2;
   bool finy, finydelta;
 
   double min1, max1;
@@ -114,7 +114,8 @@ int main(int argc, char **argv)
 
   if (argc < 4) 
     {
-      cout << "Usage: " << argv[0] << " LOWER_BOUND UPPER_BOUND BOXN [function]" << endl;
+      cout << "Usage: " << argv[0];
+      cout << " LOWER_BOUND UPPER_BOUND BOXN [function]" << endl;
       return 0;
     }
 
@@ -158,9 +159,9 @@ int main(int argc, char **argv)
       // missing data
 
       if (finite(y))
-	data1 << y << endl;
+          data1 << y << endl;
       else
-	data1 << "?" << endl;
+          data1 << "?" << endl;
 
     }
 
@@ -170,7 +171,7 @@ int main(int argc, char **argv)
 
   // We write the error boxes for the AAF
 
-  double x1,x2, xc; 
+  double x1,x2, xc;
 
   fin1 = 1;
   ydelta_tot1 = 0;
@@ -204,22 +205,22 @@ int main(int argc, char **argv)
       finydelta = finite(ydelta);
 
       if (finy)
-	data2 << y << "\t";
+          data2 << y << "\t";
       else
-	data2 << "?" << "\t";
+          data2 << "?" << "\t";
 
       if (finydelta)
-	data2 << ydelta << endl;
+          data2 << ydelta << endl;
       else
-	  data2 << "?" << endl;
+          data2 << "?" << endl;
 
       if (finy && finydelta)
-	{
-	  if (min1 > y-ydelta) min1=y-ydelta;
-	  if (max1 < y+ydelta) max1=y+ydelta;
-	}
+      {
+          if (min1 > y-ydelta) min1=y-ydelta;
+          if (max1 < y+ydelta) max1=y+ydelta;
+      }
       else
-	fin1=0;
+          fin1=0;
 
     }
 
@@ -247,10 +248,10 @@ int main(int argc, char **argv)
       xc=(x1+x2)/2;
 
       m.set(x1,x2);
-      n=eval_fct(m);   
+      n=eval_fct(m);
 
       y = n.midpoint();
-      ydelta = n.getSup()-y; 
+      ydelta = n.getSup()-y;
       ydelta_tot2 += ydelta;
 
       data3 << "\t" << xc << "\t";
@@ -262,22 +263,22 @@ int main(int argc, char **argv)
       finydelta = finite(ydelta);
 
       if (finy)
-	data3 << y << "\t";
+          data3 << y << "\t";
       else
-	data3 << "?" << "\t";
+          data3 << "?" << "\t";
 
       if (finydelta)
-	data3 << ydelta << endl;
+          data3 << ydelta << endl;
       else
-	data2 << "?" << endl;
+          data2 << "?" << endl;
 
       if (finy && finydelta)
-	{
-	  if (min2 > y-ydelta) min2=y-ydelta;
-	  if (max2 < y+ydelta) max2=y+ydelta;
-	}
+      {
+          if (min2 > y-ydelta) min2=y-ydelta;
+          if (max2 < y+ydelta) max2=y+ydelta;
+      }
       else
-	fin2=0;
+          fin2=0;
 
     }
 
@@ -295,13 +296,17 @@ int main(int argc, char **argv)
   double area2 = (ubound-lbound)*(max2-min2);
 
 
-  cout << "IA: [" << min2 << ":" << max2 << "], " << max2-min2 << ", 100% , 100%" << endl;
-  cout << "AA: [" << min1 << ":" << max1 << "], " << max1-min1 << ", " << 100*(area1/area2) << "% , " << 100*(ydelta_tot1/ydelta_tot2) << "%" << endl << endl;
+  cout << "IA: [" << min2 << ":" << max2 << "], " << max2-min2
+       << ", 100% , 100%" << endl;
+  cout << "AA: [" << min1 << ":" << max1 << "], " << max1-min1
+       << ", " << 100*(area1/area2) << "% , "
+       << 100*(ydelta_tot1/ydelta_tot2) << "%" << endl << endl;
   cout << "(yrange = [" << min << ":" << max << "])" << endl;
 
   if (!(fin1 && fin2))
     {
-      cout << "There are some infinite or NaN values so statistics are not reliable" << endl;
+      cout << "There are some infinite or NaN values so "
+               "statistics are not reliable" << endl;
     }
 
   cout << endl;
@@ -320,16 +325,18 @@ int main(int argc, char **argv)
   gp << "set size 1,0.5" << endl;
   gp << "set yrange [" << min << ":" << max << "]" << endl;
   gp << "set xrange [" << lbound << ":" << ubound << "]" << endl;
-  gp << "plot \"data2\" using 1:2:(" << width/2 << "):3 with boxxyerrorbars 3, ";
+  gp << "plot \"data2\" using 1:2:(" << width/2
+     << "):3 with boxxyerrorbars 3, ";
   gp << "\"data1\" smooth csplines 1" << endl;
-  gp << "set title \"interval Arithmetic representation"; 
+  gp << "set title \"interval Arithmetic representation";
   if (!fin2) gp << "*";
   if (argc==5) gp << " : " << argv[4];
   gp << "\" " << endl;
   gp << "set origin 0,0.5" << endl;
-  gp << "plot \"data3\" using 1:2:(" << width/2 << "):3 with boxxyerrorbars 3, ";
+  gp << "plot \"data3\" using 1:2:(" << width/2
+     << "):3 with boxxyerrorbars 3, ";
   gp << "\"data1\" smooth csplines 1" << endl;
-  
+
   gp.close();
 
   cout << "Execute plot.sh to display the result" << endl;
@@ -337,20 +344,4 @@ int main(int argc, char **argv)
   exit(0);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

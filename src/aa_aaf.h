@@ -16,9 +16,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with libaffa; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with libaffa; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 
@@ -26,6 +26,7 @@
 #define AA_AAF_H
 
 #include "aa_interval.h"
+#include <cmath>
 #include <iostream>
 
 
@@ -59,9 +60,10 @@ public:
     AAF(double v0 = 0);
     AAF(double v0, const double * t1, const unsigned * t2, unsigned T);
     AAF(const AAF & P);
-    
- // affine constructor
-    AAF(const AAF & P, double alpha, double dzeta, double delta, AAF_TYPE type);
+
+    // affine constructor
+    AAF(const AAF & P, double alpha, double dzeta, double delta,
+        AAF_TYPE type);
     AAF(interval iv);
     ~AAF();
 
@@ -79,7 +81,7 @@ public:
     friend AAF sin(const AAF & P);
     friend AAF pow(const AAF & P, double exp);
     friend AAF half_plane(const AAF & P);
-    
+
     AAF operator - () const;
     AAF operator * (double) const;
 
@@ -146,7 +148,7 @@ inline AAF:: AAF(double v0):
 }
 
 inline AAF:: AAF(AAF_TYPE t):
-    special(t),cvalue(0), length(0),
+    special(t), cvalue(0), length(0),
     coefficients(NULL), indexes(NULL)
 {
 }
@@ -177,12 +179,12 @@ inline unsigned AAF::get_length() const {
 inline bool AAF::is_indeterminate() const {
     if(special & AAF_TYPE_INFINITE) return 1;
     if(special & AAF_TYPE_NAN) return 1;
-    return rad() == INFINITY;
+    return rad() == HUGE_VAL;
 }
 
 inline bool AAF::is_infinite() const {
     if(special & AAF_TYPE_INFINITE) return 1;
-    return rad() == INFINITY;
+    return rad() == HUGE_VAL;
 }
 
 inline bool AAF::is_nan() const {

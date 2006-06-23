@@ -16,9 +16,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with libaffa; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with libaffa; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 
@@ -50,7 +50,7 @@ AAF AAF::operator + (const AAF & P) const {
     AAF Temp(cvalue+P.cvalue);  // Create our resulting AAF
 
     Temp.special = binary_special(special, P.special);
-    
+
     Temp.indexes = new unsigned [l1+l2]; // the indexes of the result
     unsigned * idtemp=Temp.indexes;
 
@@ -76,18 +76,18 @@ AAF AAF::operator + (const AAF & P) const {
         unsigned b=pu2-id2;
 
         if (a==l1|| id1[a]!=idtemp[i])
-	{
+        {
             vatempg[i]=va2[b];  // va2[b]+0
             pu2++;
             continue;
-	}
+        }
 
         if (b==l2 || id2[b]!=idtemp[i])
-	{
+        {
             vatempg[i]=va1[a];  // va1[a]+0
             pu1++;
             continue;
-	}
+        }
 
         vatempg[i]=va1[a]+va2[b];
         pu1++;
@@ -103,7 +103,7 @@ AAF AAF::operator + (const AAF & P) const {
 AAF AAF::operator - (const AAF & P) const {
     //handle_infinity(P);
     //handle_infinity(*this);
-    
+
     unsigned l1 = length;
     unsigned l2 = P.length;
 
@@ -119,7 +119,7 @@ AAF AAF::operator - (const AAF & P) const {
     AAF Temp(cvalue-P.cvalue);  // Create our resulting AAF
 
     Temp.special = binary_special(special, P.special);
-        
+
     Temp.indexes = new unsigned [l1+l2];
     unsigned * idtemp=Temp.indexes;
 
@@ -145,18 +145,18 @@ AAF AAF::operator - (const AAF & P) const {
         unsigned b=pu2-id2;
 
         if (a==l1|| id1[a]!=idtemp[i])
-	{
+        {
             vatempg[i]=-va2[b];  // 0-va2[b]
             pu2++;
             continue;
-	}
+        }
 
         if (b==l2 || id2[b]!=idtemp[i])
-	{
+        {
             vatempg[i]=va1[a];  // va1[a]-0
             pu1++;
             continue;
-	}
+        }
 
         vatempg[i]=va1[a]-va2[b];
         pu1++;
@@ -227,8 +227,9 @@ AAF operator - (const double cst, AAF P) {
 
 // affine constructor
 
-AAF::AAF(const AAF & P, double alpha, double dzeta, double delta, AAF_TYPE type) 
-    : cvalue(alpha*(P.cvalue)+dzeta), 
+AAF::AAF(const AAF & P, double alpha, double dzeta, double delta,
+         AAF_TYPE type)
+    : cvalue(alpha*(P.cvalue)+dzeta),
       coefficients(NULL), indexes(NULL),
       length((P.length)+1)
 {

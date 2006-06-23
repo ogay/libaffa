@@ -16,9 +16,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with libaffa; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with libaffa; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 
@@ -33,7 +33,7 @@ unsigned AAF::last = 0; // at beginnnig
 // Create an AAF from an array of doubles
 // ! For debug purposes
 
-AAF:: AAF(double v0, const double * t1, const unsigned * t2, unsigned T) 
+AAF:: AAF(double v0, const double * t1, const unsigned * t2, unsigned T)
     : special(AAF_TYPE_AFFINE)
 {
 
@@ -55,7 +55,7 @@ AAF:: AAF(double v0, const double * t1, const unsigned * t2, unsigned T)
 
 // Copy constructor
 
-AAF:: AAF(const AAF &P) 
+AAF:: AAF(const AAF &P)
     : special(P.special)
 {
     unsigned plength = P.get_length();
@@ -80,17 +80,17 @@ AAF:: AAF(interval iv) {
     unsigned en = inclast();
     coefficients = new double [1];
     indexes = new unsigned [1];
-  
-    if(iv.width() == INFINITY) {
+
+    if(iv.width() == HUGE_VAL) {
         cvalue = 0;
         length = 1;
-        coefficients[0] = INFINITY;
+        coefficients[0] = HUGE_VAL;
         indexes[0] = en;
         special = AAF_TYPE_INFINITE;
     } else {
         cvalue=(iv.right()+iv.left())/2;
         length = 1;
-    
+
         coefficients[0]=(iv.right()-iv.left())/2;
         indexes[0]=en;
         special = AAF_TYPE_AFFINE;
@@ -116,7 +116,7 @@ AAF & AAF::operator = (const AAF & P)
 {
     special = P.special;
     unsigned plength = P.get_length();
-    
+
     if (&P!=this)
     {
         if (length != plength)
@@ -173,7 +173,7 @@ std::ostream & operator << (std::ostream & s, const AAF &P)
 
     for (unsigned i=0; i < P.length ; i++)
         s << " + " << P.coefficients[i] << "e" << P.indexes[i];
-    
+
     s << " [" << P.length << "]";
     return s;
 
@@ -213,7 +213,7 @@ interval AAF::convert() const
     // lower bound == central value of the AAF - the total deviation
     // upper bound == central value of the AAF + the total deviation
     if(is_indeterminate())
-        return interval(-INFINITY, INFINITY);
+        return interval(-HUGE_VAL, HUGE_VAL);
     return interval(cvalue-rad(), cvalue+rad());
 }
 
@@ -240,11 +240,11 @@ double AAF::rad() const
 AAF half_plane(const AAF & P) {
     const double a = P.convert().left(); // [a,b] is our interval
     const double b = P.convert().right();
-    
+
     AAF_TYPE type;
     if(P.special == AAF_TYPE_NAN)
         return P;
-    
+
     if(a > 0)
         return P;
     else if(b < 0) {
@@ -262,10 +262,10 @@ AAF half_plane(const AAF & P) {
         unsigned plength = P.get_length();
         result.coefficients = new double [plength];
         result.indexes = new unsigned [plength];
-        
+
         result.cvalue = b/2;;
         result.length = plength;
-        
+
         double rescale = (b - a)/b;
         for (unsigned i = 0; i<plength; i++)
         {
