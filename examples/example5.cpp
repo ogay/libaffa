@@ -37,28 +37,25 @@
  * If you want to change the function to display, you can change it in the
  * template fct eval_fct()
  *
- * Compile : g++ -laa lEasyval example5.cpp -o example5
+ * Compile : g++ -laffa -lEasyval example5.cpp -o example5
  * (requires libaffa and libEasyval)
  *
  * (C) 2003 Olivier Gay <olivier.gay@e3.pfl.ch>
 */
 
-#include <cstdio>
+#include <aa.h>
 #include <cmath>
-#include <iostream>
-#include <fstream>
+#include <cstdio>
 #include <cstdlib>
+#include <fstream>
+#include <iostream>
 #include <sys/times.h>
 #include <unistd.h>
-#include <aa.h>
 #include <Easyval.hh>
 
 using namespace std;
 
-
 #define PI 4*(atan(1.0))
-
-
 
 // Put here the function you want to evaluate
 
@@ -69,10 +66,8 @@ template <typename TP> TP eval_fct(TP x1, TP x2)
   return y;
 }
 
-
 int main(int argc, char **argv)
 {
-
   clock_t tstart1, tstart2;
   clock_t tstop1, tstop2;
   struct tms tmsave;
@@ -95,7 +90,6 @@ int main(int argc, char **argv)
 
   double y;
 
-
   interval itv1, itv2;
   AAF u1, u2, v;  // v = v(u1,u2)
 
@@ -116,8 +110,6 @@ int main(int argc, char **argv)
   lbound2 = atof(argv[3]);
   ubound2 = atof(argv[4]);
 
-
-
   boxn = atoi(argv[5]);
 
   if ((lbound1 > ubound1)||(lbound2 > ubound2))
@@ -135,7 +127,6 @@ int main(int argc, char **argv)
 
   double x1_a, x1_b;
   double x2_a, x2_b;
-
 
   tstart1 = times(&tmsave);
 
@@ -192,64 +183,9 @@ int main(int argc, char **argv)
 
   total2 = (double) (tstop2-tstart2)/100;
 
-
   cout << "AA: "<< total1 << "s " << endl;
   cout << "IA: "<< total2 << "s " << endl;
 
   exit(0);
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

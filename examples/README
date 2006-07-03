@@ -1,10 +1,10 @@
 example1.cpp -- A simple example of using the lib
-example2.cpp -- This example generates datas and commands of the AA model
-example3.cpp -- This example generates datas and commands of the IA and the AA model
+example2.cpp -- This example generates data and commands of the AA model
+example3.cpp -- This example generates data and commands of the IA and the AA model
 example4.cpp -- Precision performances between the IA and the AA model
 example5.cpp -- Time performances between AA and IA model
 
-the examples 3,4 and 5 requires libEasyval by Johan Vervloet and Stefan Becuwe
-the examples 2 and 3 generate datas and command for the gnuplot program
+the examples 3,4 and 5 require libEasyval by Johan Vervloet and Stefan Becuwe
+the examples 2 and 3 generate data and command for the gnuplot program
 
 olivier.gay@a3.epfl.ch

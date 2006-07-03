@@ -19,7 +19,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
 #include <aa.h>
 #include <cstdio>
 #include <iostream>
@@ -28,9 +27,6 @@ using namespace std;
 
 int main()
 {
-
-  //
-
   interval u(-2,2);
   interval v(-1,1);
   AAF x = u;
@@ -47,7 +43,7 @@ int main()
   cout << " r" << endl;
   cout << r;
   cout << " s" << endl;
-  cout << s;;
+  cout << s;
 
   cout << " (10+x+r)" << endl;
   cout << temp1;
@@ -58,9 +54,6 @@ int main()
   cout << z;
   cout << z.convert();
 
-  //
-
   exit(0);
-
 }
 

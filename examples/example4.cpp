@@ -25,7 +25,7 @@
  * We use libEasyval by Johan Vervloet and Stefan Becuwe for the IA model
  *
  * This example is written for a function y=f(x1,x2) but it can be easyly
- * changed to use with a higher number of variables
+ * changed to be used with a higher number of variables
  *
  * Usage: ./example4 LOWER_BOUND1 UPPER_BOUND1 LOWER_BOUND2 UPPER_BOUND2 BOXN
  *
@@ -35,20 +35,19 @@
  * If you want to change the function to display, you can change it in the
  * template fct eval_fct()
  *
- * Compile : g++ -laa lEasyval example4.cpp -o example4
+ * Compile : g++ -laffa -lEasyval example4.cpp -o example4
  * (requires libaffa and libEasyval)
  *
  * (C) 2003 Olivier Gay <olivier.gay@a3.epfl.ch>
  */
 
-#include <cstdio>
-#include <cmath>
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
 #include <aa.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
 #include <Easyval.hh>
-
 
 using namespace std;
 
@@ -66,7 +65,6 @@ template <typename TP> TP eval_fct(TP x1, TP x2)
   y=1+(x1*x1-2)*x2+x1*x2*x2;;
   return y;
 }
-
 
 int main(int argc, char **argv)
 {
@@ -114,8 +112,6 @@ int main(int argc, char **argv)
 
   lbound2 = atof(argv[3]);
   ubound2 = atof(argv[4]);
-
-
 
   boxn = atoi(argv[5]);
 
@@ -228,7 +224,6 @@ int main(int argc, char **argv)
   double area_AA = (max1-min1);
   double area_IA = (max2-min2);
 
-
   cout << "IA: [" << min2 << ":" << max2 << "], " << max2-min2
        << ", 100% , 100%" << endl;
   cout << "AA: [" << min1 << ":" << max1 << "], " << max1-min1
@@ -244,6 +239,5 @@ int main(int argc, char **argv)
   cout << endl;
 
   exit(0);
-
 }
 

@@ -22,40 +22,40 @@
 
 /* This is a program to display AA
  *
- * You'll need gnuplot to display the datas
+ * You'll need gnuplot to display the data
  *
  * It writes 3 files
  * a) gnuplot_commands : several commands to plot the function and the boxes
- * b) data1   : the datas of the evaluated function
- * c) data2   : the datas for the boxes of our AAF
+ * b) data1   : the data of the evaluated function
+ * c) data2   : the data for the boxes of our AAF
  *
  * Usage: ./example2 LOWER_BOUND UPPER_BOUND BOXN [function]
  *
  * It means we use an [LOWER_BOUND:UPPERBOUND] interval divided
- * in BOXN sud-divisions (boxes) and [function] is an optionnaly
+ * in BOXN sub-divisions (boxes) and [function] is an optionnaly
  * function to display in the gnuplot titles
  *
  * If you want to change the function to display, you can change it in the
  * template fct eval_fct()
  *
- * In the gnuplot display a star after the title indicate
+ * In the gnuplot display a star after the title indicates
  * that a missing box in the plot is due to a non-finite value
  * (either infinite or nan) during the caculation
  *
- * Otherwise a missing box indicate a very small height
+ * Otherwise a missing box indicates a very small height
  * of the box.
  *
- * Compile : g++ -laa example2.cpp -o example2
+ * Compile : g++ -laffa example2.cpp -o example2
  *
  * (C) 2003 Olivier Gay <olivier.gay@a3.epfl.ch>
  */
 
-#include <cstdio>
-#include <cmath>
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
 #include <aa.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
+#include <fstream>
+#include <iostream>
 
 using namespace std;
 
@@ -64,10 +64,10 @@ using namespace std;
 #define PTS 500       // number of points for the interpolated function
                      // 50 is normally enough
 
-
 // Put here the function you want to evaluate
 
-template <typename TP> TP eval_fct(TP x) {
+template <typename TP> TP eval_fct(TP x)
+{
     TP y;
     y = sqrt(x*x - x + 0.5) / sqrt(x*x + 0.5); // y(x)
     y = sqrt(y*y - y + 0.5) / sqrt(y*y + 0.5); // y(y(x))
@@ -75,8 +75,8 @@ template <typename TP> TP eval_fct(TP x) {
     return y;
 }
 
-
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     // 0 1 24 ; -1 1
 
 
@@ -188,7 +188,6 @@ int main(int argc, char **argv) {
 
     }
 
-
     data2.close();
 
     cout << "AA: [" << min << ":" << max << "], " << max-min << endl << endl;
@@ -199,9 +198,9 @@ int main(int argc, char **argv) {
     gp << "set grid" << endl;
     gp << "set nokey" << endl;
     gp << "set title \"Affine Arithmetic representation";
-    if(!fin)
+    if (!fin)
         gp << "*";
-    if(argc == 5)
+    if (argc == 5)
         gp << " : " << argv[4];
     gp <<  "\" " << endl;
     gp << "set xrange [" << lbound << ":" << ubound << "]" << endl;
@@ -213,7 +212,6 @@ int main(int argc, char **argv) {
     cout << "Execute plot.sh to display the result" << endl;
 
     exit(0);
-
 }
 
 /*

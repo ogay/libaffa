@@ -29,9 +29,9 @@
  *
  * It writes 4 files
  * a) gnuplot_commands : several commands to plot the function and the boxes
- * b) data1   : the datas of the evaluated function
- * c) data2   : the datas for the boxes of our AAF
- * d) data3   : the datas for the boxes of the IA model
+ * b) data1   : the data of the evaluated function
+ * c) data2   : the data for the boxes of our AAF
+ * d) data3   : the data for the boxes of the IA model
  *
  * Usage: ./example3 LOWER_BOUND UPPER_BOUND BOXN [function]
  *
@@ -42,35 +42,32 @@
  * If you want to change the function to display, you can change it in the
  * template fct eval_fct()
  *
- * In the gnuplot display a star after the title indicate
+ * In the gnuplot display a star after the title indicates
  * that a missing box in the plot is due to a non-finite value
  * (either infinite or nan) during the caculation
  *
- * Otherwise a missing box indicate a very small height
+ * Otherwise a missing box indicates a very small height
  * of the box.
  *
- * Compile : g++ -laa lEasyval example3.cpp -o example3
+ * Compile : g++ -laffa -lEasyval example3.cpp -o example3
  * (requires libaffa and libEasyval)
  *
  * (C) 2003 Olivier Gay <olivier.gay@a3.epfl.ch>
 */
 
-#include <cstdio>
-#include <cmath>
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
 #include <aa.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
 #include <Easyval.hh>
 
-
 using namespace std;
-
 
 #define PI 4*(atan(1.0))
 #define PTS 50       // number of points for the interpolated function
                      // 50 is normally enough
-
 
 // Put here the function you want to evaluate
 
@@ -86,7 +83,6 @@ template <typename TP> TP eval_fct(TP x)
 
 int main(int argc, char **argv)
 {
-
   // 0 1 24 ; -1 1
 
   double lbound, ubound; // lower/upper bound of the interval
@@ -342,6 +338,5 @@ int main(int argc, char **argv)
   cout << "Execute plot.sh to display the result" << endl;
 
   exit(0);
-
 }
 
