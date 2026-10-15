@@ -179,16 +179,22 @@ AAF inv(const AAF & P) {
 }
 
 AAF abs(const AAF & P) {
+    handle_infinity(P);
     if(P.strictly_neg())
         return -P;
     if(P.straddles_zero()) {
-        AAF Temp(P);
-        Temp.cvalue = fabs(Temp.cvalue)/2;
-        Temp.special = P.special;
+        const interval bounds = P.convert();
+        const double a = bounds.left();
+        const double b = bounds.right();
+        if (a == b)
+            return P; // the singleton zero
 
-        for (unsigned i=0; i<P.length; i++)
-            Temp.coefficients[i]=(Temp.coefficients[i])/2;
-        return Temp;
+        // The secant has slope (a+b)/(b-a) and intercept -2*a*b/(b-a).
+        // Center it with the parallel line through the kink at zero;
+        // a fresh noise symbol encloses the remaining approximation error.
+        const double alpha = (a+b)/(b-a);
+        const double delta = -a*(b/(b-a));
+        return AAF(P, alpha, delta, delta, P.special);
     }
     return P;
 }
