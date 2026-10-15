@@ -185,7 +185,30 @@ AAF asinh(const AAF & P) {
 }
 
 AAF atanh(const AAF & P) {
+    if (P.is_indeterminate())
+        return AAF(AAF_TYPE_NAN);
 
+    const interval bounds = P.convert();
+    const double a = bounds.left();
+    const double b = bounds.right();
+    // Match log's domain policy: reject intervals that are not wholly
+    // contained in the real, finite domain of the function.
+    if (a <= -1 || b >= 1)
+        return AAF(AAF_TYPE_NAN);
+
+    const double fa = 0.5*(log1p(a) - log1p(-a));
+    const double fb = 0.5*(log1p(b) - log1p(-b));
+    if (a == b)
+        return AAF(fa);
+
+    // Choose the minimum derivative on [a,b]. The residual
+    // atanh(x)-alpha*x is then nondecreasing, even across zero, so its
+    // extrema are attained at the endpoints.
+    const double nearest = (a > 0) ? a : ((b < 0) ? b : 0);
+    const double alpha = 1/((1-nearest)*(1+nearest));
+    const double lo = fa - alpha*a;
+    const double hi = fb - alpha*b;
+    return AAF(P, alpha, (lo+hi)/2, fabs(hi-lo)/2, P.get_special());
 }
 
 
