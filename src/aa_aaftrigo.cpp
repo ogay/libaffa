@@ -41,6 +41,8 @@
 
 AAF sin(const AAF & P)
 {
+    if(P.is_nan())
+        return AAF(AAF_TYPE_NAN);
     if(P.is_infinite())
         return AAF(interval(-1,1));
     interval i = P.convert();
@@ -49,6 +51,8 @@ AAF sin(const AAF & P)
 
     const double a = i.left();
     const double b = i.right();
+    if (a == b)
+        return AAF(sin(a));
 
 
     // y' = alpha*x+dzeta , the regression line
@@ -60,9 +64,6 @@ AAF sin(const AAF & P)
 // the trivial case, the interval is larger than 2*PI
         // y' = 0 , delta = 1 cause -1 <= sin(x) <= +1
         return AAF(interval(-1,1));
-        alpha = 0.0;
-        dzeta = 0.0;
-        delta = 1.0;
     } else {
 // case of the least squares
         double x[NPTS];
@@ -122,6 +123,16 @@ AAF sin(const AAF & P)
         // of the residues (in absolute values)
 
         delta = *std::max_element(r, r+NPTS);
+
+        // Between two sample points, the residual's second derivative is
+        // -sin(x), whose absolute value is at most one. Linear interpolation
+        // of the residual therefore has error at most h*h/8. Account for
+        // this error instead of assuming samples contain the extrema.
+        // Use the actual largest gap, including floating-point spacing.
+        double gap = 0;
+        for (unsigned i = 1; i < NPTS; i++)
+            gap = std::max(gap, x[i] - x[i-1]);
+        delta += gap*gap/8;
     }
 
 
