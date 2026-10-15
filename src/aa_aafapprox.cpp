@@ -239,17 +239,24 @@ AAF exp(const AAF & P) {
         return AAF(interval(-HUGE_VAL, HUGE_VAL));
     }
 
+    if (a == b)
+        return AAF(ea);
+    // Equal endpoint values can occur after underflow or rounding. Avoid
+    // log(0) and retain the (possibly degenerate) monotone range.
+    if (ea == eb)
+        return AAF(interval(ea, eb));
+
     const double alpha = (eb-ea)/(b-a);
     // alpha is the slope of the line r(x) that
     // interpolate (a, exp(a)) and (b, exp(b))
     const double xs = log(alpha);// the x of the maximum error
     const double maxdelta = alpha*(xs - 1 - a)+ea;
 
-    // dzeta calculation:
-    const double dzeta = alpha*(1 - xs);
-
-    // Calculation of the error
+    // The tangent and secant intercepts differ by maxdelta. Center the
+    // approximation between them, since its error radius is only half
+    // that difference.
     const double delta = maxdelta/2;
+    const double dzeta = alpha*(1 - xs) + delta;
 
     return AAF(P, alpha, dzeta, delta, P.special);
 }
